@@ -6,7 +6,7 @@ enable_testing()
 
 
 include_directories(./include)
-aux_source_directory(src GAVA_SRC)
+aux_source_directory(src/gava GAVA_SRC)
 add_executable(gava ${GAVA_SRC})
 
 
