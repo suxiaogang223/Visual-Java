@@ -6,9 +6,9 @@ class Cmd
 private:
     bool helpFlag = false;
     bool versionFlag = false;
-    std::string className = "";
-    std::string classPath = "";
-    std::string XjrePath = "";
+    std::string className = "";//类名
+    std::string classPath = "";//用户路径
+    std::string XjrePath = "";//运行路径
 
     bool string_equal(char* s1,std::string s2){
         for(int i = 0;i<s2.size();i++)
