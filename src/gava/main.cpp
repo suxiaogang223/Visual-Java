@@ -1,4 +1,10 @@
 #include"cmd.h"
+#include <dirent.h>
+
+void startJVM(Cmd &cmd){
+    
+    std::cout<<cmd.getClassName()<<" "<<cmd.getClassPath()<<" "<<cmd.getXjrePath();
+}
 
 int main(int argc,char* argv[]){
     Cmd cmd;
@@ -13,16 +19,13 @@ int main(int argc,char* argv[]){
     }else if(cmd.isVersion()){
         cmd.printVersion();
         return 0;
-    }else if(cmd.getClassName()==""){
-        std::cerr<<"please write the class which you want to run"<<std::endl;
-        cmd.printUsage();
+    }else if(!opendir(cmd.getClassPath().c_str())){
+        std::cerr<< cmd.getClassPath()<<" doesn't exist"<<std::endl;
+        return 0;
+    }else if(!opendir(cmd.getXjrePath().c_str())){
+        std::cerr<< cmd.getXjrePath()<<" doesn't exist"<<std::endl;
+        return 0;
     }else{
-        std::string class_path = cmd.getClassPath();
-        std::string class_name = cmd.getClassName();
-        if(class_path==""){
-            std::cout<<class_name+" started"<<std::endl;
-        }else{
-            std::cout<<class_path+class_name+" statred"<<std::endl;
-        }
+        startJVM(cmd);
     }
 }

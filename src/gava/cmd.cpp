@@ -34,6 +34,13 @@ bool Cmd::parse(int argc, char *argv[])//处理命令行
             className = argv[i];
         }
     }
+    
+    if(className=="")
+        return false;
+    if(XjrePath=="")
+        return false;
+    if(classPath=="")
+        classPath = ".";
     return true;
 }
 
