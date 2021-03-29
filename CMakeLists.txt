@@ -4,9 +4,13 @@ project(Visual-Java VERSION 0.1.0)
 include(CTest)
 enable_testing()
 
-add_executable(gava main.cpp cmd)
-add_library(cmd cmd.cpp)
+
+include_directories(./include)
+aux_source_directory(src GAVA_SRC)
+add_executable(gava ${GAVA_SRC})
+
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)
+
