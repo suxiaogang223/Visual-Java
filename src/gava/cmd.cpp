@@ -24,6 +24,10 @@ bool Cmd::parse(int argc, char *argv[])//处理命令行
             if(classPath!="")
                 return false;
             classPath = argv[++i];
+        }else if(string_equal(argv[i],"-Xjre")){
+            if(XjrePath!="")
+                return false;
+            XjrePath = argv[++i];
         }else{
             if(className!="")
                 return false;
@@ -41,6 +45,10 @@ std::string Cmd::getClassPath(){
     return classPath;
 }
 
+std::string Cmd::getXjrePath(){
+    return XjrePath;
+}
+
 bool Cmd::isHelp(){
     return helpFlag;
 }
@@ -55,7 +63,7 @@ void Cmd::printUsage(){
     std::cout<<"-v/-version       print version message and exit"<<std::endl;
     std::cout<<"-?/-help          print usage message and exit"<<std::endl;
     std::cout<<"-cp/-classpath    classpath"<<std::endl;
-    
+    std::cout<<"-Xjre             path to jre"<<std::endl; 
 }
 
 void Cmd::printVersion(){

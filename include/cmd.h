@@ -8,6 +8,7 @@ private:
     bool versionFlag = false;
     std::string className = "";
     std::string classPath = "";
+    std::string XjrePath = "";
 
     bool string_equal(char* s1,std::string s2){
         for(int i = 0;i<s2.size();i++)
@@ -21,6 +22,7 @@ public:
     bool isVersion();
     std::string getClassName();
     std::string getClassPath();
+    std::string getXjrePath();
     void printUsage();
     void printVersion();
 };
