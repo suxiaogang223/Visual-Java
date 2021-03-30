@@ -38,9 +38,16 @@ bool Cmd::parse(int argc, char *argv[])//处理命令行
     if(className=="")
         return false;
     if(XjrePath=="")
-        return false;
+        //return false;
+        XjrePath = "C:\\Users\\lishizhen\\Desktop\\Visual-Java\\gre";//将gre（gava runtime environment）暂时设置
     if(classPath=="")
-        classPath = ".";
+        classPath = "./";
+    if(classPath.back()!='/')
+        classPath = classPath+"/";
+    if(!opendir(classPath.c_str()))
+        exit_with_massage("can't find dir: "+classPath);
+    if(!opendir(XjrePath.c_str()))
+        exit_with_massage("can't find dir: "+XjrePath);
     return true;
 }
 

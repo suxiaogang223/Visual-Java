@@ -1,9 +1,11 @@
 #include"cmd.h"
+#include"jvm.h"
 #include <dirent.h>
 
 void startJVM(Cmd &cmd){
     
-    std::cout<<cmd.getClassName()<<" "<<cmd.getClassPath()<<" "<<cmd.getXjrePath();
+    JVM jvm;
+    jvm.satrtJVM(cmd); 
 }
 
 int main(int argc,char* argv[]){
@@ -18,12 +20,6 @@ int main(int argc,char* argv[]){
         return 0;
     }else if(cmd.isVersion()){
         cmd.printVersion();
-        return 0;
-    }else if(!opendir(cmd.getClassPath().c_str())){
-        std::cerr<< cmd.getClassPath()<<" doesn't exist"<<std::endl;
-        return 0;
-    }else if(!opendir(cmd.getXjrePath().c_str())){
-        std::cerr<< cmd.getXjrePath()<<" doesn't exist"<<std::endl;
         return 0;
     }else{
         startJVM(cmd);

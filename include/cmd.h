@@ -1,5 +1,7 @@
-#pragma
+#pragma once
 #include <iostream>
+#include<dirent.h>
+#include"error_exit.h"
 
 class Cmd
 {

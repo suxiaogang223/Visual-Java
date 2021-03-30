@@ -7,7 +7,10 @@ enable_testing()
 
 include_directories(./include)
 aux_source_directory(src/gava GAVA_SRC)
-add_executable(gava ${GAVA_SRC})
+aux_source_directory(src/classfile CLASSFILE_SRC)
+aux_source_directory(src/jvm JVM_SRC)
+add_executable(gava ${GAVA_SRC} ${CLASSFILE_SRC} ${JVM_SRC})
+
 
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
