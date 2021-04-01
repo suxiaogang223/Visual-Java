@@ -39,7 +39,7 @@ bool Cmd::parse(int argc, char *argv[])//处理命令行
         return false;
     if(XjrePath=="")
         //return false;
-        XjrePath = "C:\\Users\\lishizhen\\Desktop\\Visual-Java\\gre";//将gre（gava runtime environment）暂时设置
+        XjrePath = "C:\\Users\\lishizhen\\Desktop\\Visual-Java\\gre\\";//将gre（gava runtime environment）暂时设置
     if(classPath=="")
         classPath = "./";
     if(classPath.back()!='/')
