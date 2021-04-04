@@ -4,6 +4,7 @@
 Frame::Frame(u4 maxLocals,u4 maxStack){
     localVars = new LocalVars(maxLocals);
     operandStack = new OperandStack(maxStack);
+    lower = NULL;
 }
 
 Frame::~Frame(){

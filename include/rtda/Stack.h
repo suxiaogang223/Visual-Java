@@ -1,9 +1,16 @@
 #pragma once
 #include "Frame.h"
-class stack
+#include "rtda_typedef.h"
+class Stack
 {
 private:
-    unsigned int maxSize;
-    unsigned int size;
-    Frame *top;
+    u4 maxSize;
+    u4 size;
+    Frame *_top;
+public:
+    Stack(u4 maxSize);
+    void push(Frame *frame);
+    void pop();
+    Frame* top();
+    ~Stack();
 };

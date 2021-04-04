@@ -1,5 +1,5 @@
 #pragma once
-#include "rtda_tpdef.h"
+#include "rtda_typedef.h"
 
 class LocalVars
 {
