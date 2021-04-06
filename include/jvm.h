@@ -1,15 +1,14 @@
 #pragma once
 #include <iostream>
 #include"cmd.h"
-#include"classfile.h"
+#include"classLoader.h"
 using namespace std;
 class JVM
 {
 private:
-    string classpath;
-    string Xjrepath;
+    ClassLoader* class_loader;
+    string class_name;
 
 public:
-    void satrtJVM(Cmd &cmd);
-    void class_load(string filename);
+    JVM(Cmd &cmd);
 };

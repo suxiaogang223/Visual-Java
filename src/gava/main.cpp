@@ -1,6 +1,6 @@
 #include"cmd.h"
 #include"jvm.h"
-#include <dirent.h>
+// #include <dirent.h>
 
 void startJVM(Cmd &cmd){
     
