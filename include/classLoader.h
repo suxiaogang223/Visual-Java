@@ -1,4 +1,5 @@
 #include"rtda/heap/classfile.h"
+#include"error_exit.h"
 
 class ClassLoader{
 private:

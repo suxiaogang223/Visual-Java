@@ -4,8 +4,8 @@
 
 void startJVM(Cmd &cmd){
     
-    JVM jvm;
-    jvm.satrtJVM(cmd); 
+    JVM *jvm = new JVM(cmd);
+    jvm->test();
 }
 
 int main(int argc,char* argv[]){

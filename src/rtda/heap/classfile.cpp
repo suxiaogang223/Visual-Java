@@ -3,8 +3,8 @@
 ClassFile::ClassFile(string class_file_path)
 {
 	f.open(class_file_path, ios::in | ios::binary);
-	if (!f)
-		exit_with_massage("can't find class : " + class_file_path);
+	// if (!f)
+	// 	exit_with_massage("can't find class : " + class_file_path);//文件是否存在在classLoader中已经检查过了
 	parseFile();
 	init_static_fields();
 }
