@@ -1,4 +1,4 @@
-#include"classLoader.h"
+#include"classLoader/classLoader.h"
 
 ClassLoader::ClassLoader(string classpath,string Xjrepath){
     this->classpath = classpath;
@@ -17,5 +17,6 @@ ClassFile* ClassLoader::load(string className){
         return new ClassFile(class_file_jrepath);
     }else{
         exit_with_massage("can't find class file "+className);
+        return NULL;//为了不警告:(
     }
 }
