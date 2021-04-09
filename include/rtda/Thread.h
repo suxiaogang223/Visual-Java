@@ -4,13 +4,13 @@
 class Thread
 {
 private:
-    int pc;
+    u4 pc;
     Stack *stack;
 
 public:
     Thread(u4 maxSize);
-    void setPC(int pc);
-    int getPC();
+    void setPC(u4 pc);
+    u4 getPC();
     void pushFrame(Frame *frame);
     void popFrame();
     Frame* currentFrame();

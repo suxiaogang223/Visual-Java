@@ -5,11 +5,11 @@ Thread::Thread(u4 maxSize){
     stack = new Stack(maxSize); 
 }
 
-int Thread::getPC(){
+u4 Thread::getPC(){
     return pc;
 }
 
-void Thread::setPC(int pc){
+void Thread::setPC(u4 pc){
     this->pc = pc;
 }
 
