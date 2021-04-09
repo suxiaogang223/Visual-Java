@@ -3,6 +3,7 @@
 
 Thread::Thread(u4 maxSize){
     stack = new Stack(maxSize); 
+    pc = 0;
 }
 
 u4 Thread::getPC(){

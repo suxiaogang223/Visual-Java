@@ -5,7 +5,8 @@
 void startJVM(Cmd &cmd){
     
     JVM *jvm = new JVM(cmd);
-    jvm->test();
+    jvm->init();
+    jvm->run();
 }
 
 int main(int argc,char* argv[]){

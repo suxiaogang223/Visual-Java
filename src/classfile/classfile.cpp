@@ -205,8 +205,6 @@ Code_attribute* ClassFile::getMethodByNameAndType(string main_name, string main_
 	MethodInfo* method = NULL;
 	for (int i = 0; i < methods_count; i++) {
 		//class文件规范的检查在类文件加载时进行
-
-
 		string name(constant_pools[methods[i].name_index].utf8_info.bytes, constant_pools[methods[i].name_index].utf8_info.length);
 		string type(constant_pools[methods[i].descriptor_index].utf8_info.bytes, constant_pools[methods[i].descriptor_index].utf8_info.length);
 		if (name.compare(main_name)==0&&type.compare(main_type)==0) {
@@ -215,8 +213,7 @@ Code_attribute* ClassFile::getMethodByNameAndType(string main_name, string main_
 		}
 	}
 	if (method == NULL) {
-		cerr << "Can't find main method" << endl;
-		exit(-1);
+		exit_with_massage("Can't find method " + main_name+main_type);
 	}
 	
 	char *info = NULL;
@@ -228,8 +225,7 @@ Code_attribute* ClassFile::getMethodByNameAndType(string main_name, string main_
 		}
 	}
 	if (info == NULL) {
-		cerr << "Can't find code" << endl;
-		exit(-1);
+		exit_with_massage("can't find method code");
 	}
 
 	Code_attribute *code = new Code_attribute();

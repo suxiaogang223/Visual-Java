@@ -1,6 +1,7 @@
 #pragma once
 #include "Stack.h"
-#include"rtda_typedef.h"
+
+
 class Thread
 {
 private:

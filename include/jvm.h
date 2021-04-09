@@ -4,16 +4,20 @@
 #include"rtda/Thread.h"
 #include<vector>
 #include<map>
+using namespace std;
 class JVM
 {
 private:
     ClassLoader* class_loader;
     string main_class_name;//入口类
-    std::map<string,ClassFile*> classfiles;//存储
-    std::vector<Thread*> threads;//线程
+    map<string,ClassFile*> classfiles;//存储
+    vector<Thread*> threads;//线程
+    Thread* current_thread;
+    void interprete(char code);
+    
 
 public:
     JVM(Cmd &cmd);
-    void start(bool isVisualable);
-    void test();//测试函数
+    void init();//初始化
+    void run();//启动虚拟机
 };
