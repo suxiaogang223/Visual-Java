@@ -50,7 +50,7 @@ void JVM::run()
     }
 }
 
-void JVM::interprete(u1 code)
+void JVM::interprete(u1 code)//这个函数可以说是虚拟机中最重要的函数，他很长，但是我还没有找到足够优雅的方式进行重构:(
 {
     switch (code)
     {
