@@ -1,0 +1,58 @@
+Date : 2021-04-11 13:11:01
+Directory : c:\Users\lishizhen\Desktop\Visual-Java
+Total : 25 files,  1932 codes, 58 comments, 359 blanks, all 2349 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| C++      |         24 |      1,926 |         58 |        354 |      2,338 |
+| Markdown |          1 |          6 |          0 |          5 |         11 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++--------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                           | files      | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                              |         25 |      1,932 |         58 |        359 |      2,349 |
+| include                                                                        |         14 |      1,046 |         42 |         65 |      1,153 |
+| include\classfile                                                              |          5 |        710 |         41 |         50 |        801 |
+| include\rtda                                                                   |          5 |         76 |          0 |          9 |         85 |
+| src                                                                            |         10 |        880 |         16 |        289 |      1,185 |
+| src\classfile                                                                  |          2 |        409 |         11 |         40 |        460 |
+| src\gava                                                                       |          2 |         98 |          2 |         13 |        113 |
+| src\jvm                                                                        |          1 |        257 |          1 |        206 |        464 |
+| src\rtda                                                                       |          5 |        116 |          2 |         30 |        148 |
++--------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++--------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                       | language | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| c:\Users\lishizhen\Desktop\Visual-Java\README.md                               | Markdown |          6 |          0 |          5 |         11 |
+| c:\Users\lishizhen\Desktop\Visual-Java\include\classfile\classLoader.h         | C++      |         10 |          0 |          1 |         11 |
+| c:\Users\lishizhen\Desktop\Visual-Java\include\classfile\classfile.h           | C++      |         54 |          1 |          7 |         62 |
+| c:\Users\lishizhen\Desktop\Visual-Java\include\classfile\classfile_constants.h | C++      |        528 |         35 |         20 |        583 |
+| c:\Users\lishizhen\Desktop\Visual-Java\include\classfile\classfile_typedef.h   | C++      |         78 |          1 |         17 |         96 |
+| c:\Users\lishizhen\Desktop\Visual-Java\include\classfile\type_translate.h      | C++      |         40 |          4 |          5 |         49 |
+| c:\Users\lishizhen\Desktop\Visual-Java\include\cmd.h                           | C++      |         28 |          0 |          2 |         30 |
+| c:\Users\lishizhen\Desktop\Visual-Java\include\error_exit.h                    | C++      |          6 |          1 |          1 |          8 |
+| c:\Users\lishizhen\Desktop\Visual-Java\include\jvm.h                           | C++      |         22 |          0 |          2 |         24 |
+| c:\Users\lishizhen\Desktop\Visual-Java\include\jvm_code.h                      | C++      |        204 |          0 |          1 |        205 |
+| c:\Users\lishizhen\Desktop\Visual-Java\include\rtda\Frame.h                    | C++      |         17 |          0 |          3 |         20 |
+| c:\Users\lishizhen\Desktop\Visual-Java\include\rtda\LocalVars.h                | C++      |         13 |          0 |          2 |         15 |
+| c:\Users\lishizhen\Desktop\Visual-Java\include\rtda\OperandStack.h             | C++      |         15 |          0 |          1 |         16 |
+| c:\Users\lishizhen\Desktop\Visual-Java\include\rtda\Stack.h                    | C++      |         15 |          0 |          0 |         15 |
+| c:\Users\lishizhen\Desktop\Visual-Java\include\rtda\Thread.h                   | C++      |         16 |          0 |          3 |         19 |
+| c:\Users\lishizhen\Desktop\Visual-Java\src\classfile\classLoader.cpp           | C++      |         20 |          0 |          2 |         22 |
+| c:\Users\lishizhen\Desktop\Visual-Java\src\classfile\classfile.cpp             | C++      |        389 |         11 |         38 |        438 |
+| c:\Users\lishizhen\Desktop\Visual-Java\src\gava\cmd.cpp                        | C++      |         75 |          1 |          9 |         85 |
+| c:\Users\lishizhen\Desktop\Visual-Java\src\gava\main.cpp                       | C++      |         23 |          1 |          4 |         28 |
+| c:\Users\lishizhen\Desktop\Visual-Java\src\jvm\jvm.cpp                         | C++      |        257 |          1 |        206 |        464 |
+| c:\Users\lishizhen\Desktop\Visual-Java\src\rtda\Frame.cpp                      | C++      |         18 |          0 |          3 |         21 |
+| c:\Users\lishizhen\Desktop\Visual-Java\src\rtda\LocalVars.cpp                  | C++      |         19 |          0 |          4 |         23 |
+| c:\Users\lishizhen\Desktop\Visual-Java\src\rtda\OperandStack.cpp               | C++      |         26 |          0 |          7 |         33 |
+| c:\Users\lishizhen\Desktop\Visual-Java\src\rtda\Stack.cpp                      | C++      |         29 |          2 |          6 |         37 |
+| c:\Users\lishizhen\Desktop\Visual-Java\src\rtda\Thread.cpp                     | C++      |         24 |          0 |         10 |         34 |
+| Total                                                                          |          |      1,932 |         58 |        359 |      2,349 |
++--------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

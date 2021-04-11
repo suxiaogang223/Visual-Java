@@ -5,7 +5,7 @@ include(CTest)
 enable_testing()
 
 
-include_directories(./include)
+include_directories(include)
 aux_source_directory(src/gava GAVA_SRC)
 aux_source_directory(src/jvm JVM_SRC)
 aux_source_directory(src/rtda RTDA_SRC)

@@ -2,6 +2,7 @@
 #include"cmd.h"
 #include"classfile/classLoader.h"
 #include"rtda/Thread.h"
+#include"jvm_code.h"
 #include<vector>
 #include<map>
 using namespace std;
@@ -13,7 +14,7 @@ private:
     map<string,ClassFile*> classfiles;//存储
     vector<Thread*> threads;//线程
     Thread* current_thread;
-    void interprete(char code);
+    void interprete(u1 code);
     
 
 public:
