@@ -1,6 +1,6 @@
 #include"rtda/OperandStack.h"
 
-OperandStack::OperandStack(u4 maxStack){
+OperandStack::OperandStack(u2 maxStack){
     this->maxStack = maxStack;
     if(maxStack>0)
         stack = new u4[maxStack]();//new的同时初始化

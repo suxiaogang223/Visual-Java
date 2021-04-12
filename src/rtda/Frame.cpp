@@ -1,6 +1,6 @@
 #include "rtda/Frame.h"
 
-Frame::Frame(u4 maxLocals, u4 maxStack, u4 code_length, char *codes)
+Frame::Frame(u2 maxLocals, u2 maxStack, u4 code_length, char *codes)
 {
     localVars = new LocalVars(maxLocals);
     operandStack = new OperandStack(maxStack);
@@ -9,26 +9,49 @@ Frame::Frame(u4 maxLocals, u4 maxStack, u4 code_length, char *codes)
     lower = NULL;
 }
 
-u1 Frame::getCode(u4 pc)
+u1 Frame::get_code(u4 pc)
 {
     if (pc >= code_length)
         exit_with_massage("pc out of code length");
-    return codes[pc];
+    return (u1)codes[pc];
 }
 
-jbyte Frame::getByte(u4 pc){
-    return codes[pc+1];
+u1 Frame::get_u1(u4 pc)
+{
+    return (u1)codes[pc+1];
 }
-jshort Frame::getShort(u4 pc){
-    return ((jshort)codes[pc+1])<<8+(jshort)codes[pc+2];//需验证
+
+u2 Frame::get_u2(u4 pc)
+{
+    union{
+        u1 _u1[2];
+        u2 _u2;
+    }a;
+    a._u1[0] = codes[pc+1];
+    a._u1[1] = codes[pc+2];
+    return a._u2;
 }
+
+u4 Frame::get_u4(u4 pc)
+{
+    union{
+        u1 _u1[4];
+        u4 _u4;
+    }a;
+    a._u1[0] = codes[pc+1];
+    a._u1[1] = codes[pc+2];
+    a._u1[2] = codes[pc+3];
+    a._u1[3] = codes[pc+4];
+
+    return a._u4;
+}
+
 
 Frame::~Frame()
 {
     free(localVars);
     free(operandStack);
 }
-
 
 void Frame::push_jbyte(jbyte a)
 {
@@ -37,7 +60,8 @@ void Frame::push_jbyte(jbyte a)
     operandStack->push(byte32._u4); //存储纯粹数据
 }
 
-void Frame::push_jint(jint a){
+void Frame::push_jint(jint a)
+{
     byte_32 byte32;
     byte32._jint = a;
     operandStack->push(byte32._u4); //存储纯粹数据
@@ -49,7 +73,8 @@ void Frame::push_jchar(jchar a)
     operandStack->push(byte32._u4); //存储纯粹数据
 }
 
-void Frame::push_jboolean(jboolean a){
+void Frame::push_jboolean(jboolean a)
+{
     byte_32 byte32;
     byte32._jboolean = a;
     operandStack->push(byte32._u4);
@@ -76,9 +101,63 @@ void Frame::push_jfloat(jfloat a)
     byte32._jfloat = a;
     operandStack->push(byte32._u4); //存储纯粹数据
 }
-void Frame::push_jdouble(jdouble a){
+void Frame::push_jdouble(jdouble a)
+{
     byte_64 byte64;
     byte64._jdouble = a;
+    //下面2句的顺序决定了内部数据的存储是大端还是小端
+    //要与pop的顺序保持一致
     operandStack->push(byte64._u4[0]);
     operandStack->push(byte64._u4[1]);
+}
+
+jint Frame::load_jint(u2 shift)
+{
+    byte_32 byte32;
+    byte32._u4 = localVars->load(shift);
+    return byte32._jint;
+}
+jbyte Frame::load_jbyte(u2 shift)
+{
+    byte_32 byte32;
+    byte32._u4 = localVars->load(shift);
+    return byte32._jbyte;
+}
+jboolean Frame::load_jboolean(u2 shift)
+{
+    byte_32 byte32;
+    byte32._u4 = localVars->load(shift);
+    return byte32._jboolean;
+}
+jchar Frame::load_jchar(u2 shift)
+{
+    byte_32 byte32;
+    byte32._u4 = localVars->load(shift);
+    return byte32._jchar;
+}
+jshort Frame::load_jshort(u2 shift)
+{
+    byte_32 byte32;
+    byte32._u4 = localVars->load(shift);
+    return byte32._jshort;
+}
+jfloat Frame::load_jfloat(u2 shift)
+{
+    byte_32 byte32;
+    byte32._u4 = localVars->load(shift);
+    return byte32._jfloat;
+}
+
+jlong Frame::load_jlong(u2 shift){
+    byte_64 byte64;
+    byte64._u4[0] = localVars->load(shift);
+    byte64._u4[1] = localVars->load(shift+1);
+    return byte64._jlong;
+}
+
+jdouble Frame::load_jdouble(u2 shift){
+    byte_64 byte64;
+    byte64._u4[0] = localVars->load(shift);
+    byte64._u4[1] = localVars->load(shift+1);
+    return byte64._jdouble;
 }

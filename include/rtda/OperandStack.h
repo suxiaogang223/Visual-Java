@@ -5,11 +5,11 @@
 class OperandStack
 {
 private:
-    u4 maxStack;
+    u2 maxStack;
     u4 *stack;
-    u4 index; //当前指针
+    u2 index; //当前指针
 public:
-    OperandStack(u4 maxStack);
+    OperandStack(u2 maxStack);
     void push(u4 operand);
     void pop();
     u4 getTop();
