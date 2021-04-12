@@ -1,5 +1,5 @@
 #pragma once
-#include"classfile/classfile.h"
+#include"jvm_typedef.h"
 
 const u1 nop = (u1)0x00; //	什么都不做
 const u1 aconst_null = (u1)0x01; //	将null推送至栈顶

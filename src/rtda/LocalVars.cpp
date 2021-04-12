@@ -1,5 +1,4 @@
 #include"rtda/LocalVars.h"
-#include"error_exit.h"
 
 LocalVars::LocalVars(u4 maxLocal){
     this->maxLocal = maxLocal;

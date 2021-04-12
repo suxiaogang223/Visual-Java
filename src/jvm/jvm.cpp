@@ -50,47 +50,85 @@ void JVM::run()
     }
 }
 
-void JVM::interprete(u1 code)//这个函数可以说是虚拟机中最重要的函数，他很长，但是我还没有找到足够优雅的方式进行重构:(
+void JVM::interprete(u1 code) //这个函数可以说是虚拟机中最重要的函数，他很长，但是我还没有找到足够优雅的方式进行重构:(
 {
     switch (code)
     {
     case nop: //什么都不做
-    break;
+        break;
 
     case aconst_null: //将null推送至栈顶
-    //todo 关于引用型变量
+        //todo 关于引用型变量
 
     case iconst_m1: //将int型-1推送至栈顶
+        current_thread->currentFrame()->push_jint(-1);
+        break;
 
     case iconst_0: //将int型0推送至栈顶
+        current_thread->currentFrame()->push_jint(0);
+        break;
 
     case iconst_1: //将int型1推送至栈顶
+        current_thread->currentFrame()->push_jint(1);
+        break;
 
     case iconst_2: //将int型2推送至栈顶
+        current_thread->currentFrame()->push_jint(2);
+        break;
 
     case iconst_3: //将int型3推送至栈顶
+        current_thread->currentFrame()->push_jint(3);
+        break;
 
     case iconst_4: //将int型4推送至栈顶
+        current_thread->currentFrame()->push_jint(4);
+        break;
 
     case iconst_5: //将int型5推送至栈顶
+        current_thread->currentFrame()->push_jint(5);
+        break;
 
     case lconst_0: //将long型0推送至栈顶
+        current_thread->currentFrame()->push_jfloat(0);
+        break;
 
     case lconst_1: //将long型1推送至栈顶
+        current_thread->currentFrame()->push_jfloat(0);
+        break;
 
     case fconst_0: //将float型0推送至栈顶
+        current_thread->currentFrame()->push_jfloat(0);
+        break;
 
     case fconst_1: //将float型1推送至栈顶
+        current_thread->currentFrame()->push_jfloat(1);
+        break;
 
     case fconst_2: //将float型2推送至栈顶
+        current_thread->currentFrame()->push_jfloat(2);
+        break;
 
     case dconst_0: //将double型0推送至栈顶
+        current_thread->currentFrame()->push_jdouble(0);
+        break;
 
     case dconst_1: //将double型1推送至栈顶
+        current_thread->currentFrame()->push_jdouble(1);
+        break;
 
     case bipush: //将单字节的常量值(-128~127)推送至栈顶
+    {
+        jbyte a = current_thread->currentFrame()->getByte(current_thread->getPC());
+        current_thread->currentFrame()->push_jbyte(a);
+        break;
+    }
 
     case sipush: //将一个短整型常量值(-32768~32767)推送至栈顶
+    {
+        jshort a = current_thread->currentFrame()->getShort(current_thread->getPC());
+        current_thread->currentFrame()->push_jshort(a);
+        break;
+    }
 
     case ldc: //将int,float或String型常量值从常量池中推送至栈顶
 
@@ -428,7 +466,7 @@ void JVM::interprete(u1 code)//这个函数可以说是虚拟机中最重要的�
 
     case invokeinterface: //调用接口方法
 
-    //case –: //无此指令
+        //case –: //无此指令
 
     case new_: //创建一个对象，并将其引用值压入栈顶
 

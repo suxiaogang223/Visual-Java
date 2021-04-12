@@ -1,9 +1,7 @@
 #pragma once
+#include"jvm_typedef.h"
 
-//对classfile文件一些数据的定义
-typedef unsigned int u4;
-typedef unsigned short u2;
-typedef unsigned char u1;
+
 
 typedef struct{
 	u2 name_index;

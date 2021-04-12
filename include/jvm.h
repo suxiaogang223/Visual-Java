@@ -2,6 +2,7 @@
 #include"cmd.h"
 #include"classfile/classLoader.h"
 #include"rtda/Thread.h"
+#include"jvm_typedef.h"
 #include"jvm_code.h"
 #include<vector>
 #include<map>

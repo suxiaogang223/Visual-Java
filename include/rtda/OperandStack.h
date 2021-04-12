@@ -1,5 +1,6 @@
 #pragma once
-#include"classfile/classfile.h"
+#include"jvm_typedef.h"
+#include"error_exit.h"
 
 class OperandStack
 {

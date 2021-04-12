@@ -1,5 +1,4 @@
 #include"rtda/OperandStack.h"
-#include"error_exit.h"
 
 OperandStack::OperandStack(u4 maxStack){
     this->maxStack = maxStack;
