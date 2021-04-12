@@ -55,8 +55,10 @@ void JVM::interprete(u1 code)//这个函数可以说是虚拟机中最重要的�
     switch (code)
     {
     case nop: //什么都不做
+    break;
 
     case aconst_null: //将null推送至栈顶
+    //todo 关于引用型变量
 
     case iconst_m1: //将int型-1推送至栈顶
 

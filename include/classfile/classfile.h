@@ -6,7 +6,6 @@
 #include "classfile_typedef.h"
 #include "classfile_constants.h"
 #include "error_exit.h"
-#include"type_translate.h"//最后会被删除
 using namespace std;
 
 class ClassFile

@@ -94,3 +94,31 @@ typedef struct {
 	u4 code_length;
 	char *codes;
 }Code_attribute;
+
+
+//todo 需改进
+typedef union {
+	char b;
+	short s;
+	u2 c;
+	int i;
+	u4 a;
+	float f;
+	long long l;
+	double d;
+}fieldType;
+
+typedef union {
+	u4 U4;
+	int i;
+	//short s[2];
+	//u2 c[2];
+	//char b[4];
+	float f;
+}stackType;
+
+typedef union {
+	u4 U4[2];
+	long long l;
+	double d;
+}stackType2;
