@@ -15,6 +15,7 @@ private:
     map<string,ClassFile*> classfiles;//存储
     vector<Thread*> threads;//线程
     Thread* current_thread;
+    Frame* current_frame;
     void interprete(u1 code);
     
 

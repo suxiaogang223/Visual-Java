@@ -15,6 +15,7 @@ void JVM::init()
     current_thread = main_thread;
     Code_attribute *main_method_code = main_class->getMethodByNameAndType("main", "([Ljava/lang/String;)V");
     Frame *main_frame = new Frame(main_method_code->max_locals, main_method_code->max_stack, main_method_code->code_length, main_method_code->codes);
+    current_frame = main_frame;
     main_thread->pushFrame(main_frame);
 }
 
@@ -24,7 +25,7 @@ void JVM::run()
     u4 opcode_length[] = JVM_OPCODE_LENGTH_INITIALIZER; //每条指令的长度
     while (cin >> commend)
     {
-        if (!current_thread->currentFrame())
+        if (!current_frame)
         {
             cout << "JVM Over" << endl; //程序执行完毕
             break;
@@ -32,7 +33,7 @@ void JVM::run()
         else if (commend == "next")
         {
             u4 pc = current_thread->getPC();
-            Frame *current_frame = current_thread->currentFrame();
+            Frame *current_frame = current_frame;
             u1 code = (u1)current_frame->get_code(pc);
             interprete(code); //解析指令
             pc += opcode_length[code];
@@ -61,72 +62,72 @@ void JVM::interprete(u1 code) //这个函数可以说是虚拟机中最重要的
         //todo 关于引用型变量
 
     case iconst_m1: //将int型-1推送至栈顶
-        current_thread->currentFrame()->push_jint(-1);
+        current_frame->push_jint(-1);
         break;
 
     case iconst_0: //将int型0推送至栈顶
-        current_thread->currentFrame()->push_jint(0);
+        current_frame->push_jint(0);
         break;
 
     case iconst_1: //将int型1推送至栈顶
-        current_thread->currentFrame()->push_jint(1);
+        current_frame->push_jint(1);
         break;
 
     case iconst_2: //将int型2推送至栈顶
-        current_thread->currentFrame()->push_jint(2);
+        current_frame->push_jint(2);
         break;
 
     case iconst_3: //将int型3推送至栈顶
-        current_thread->currentFrame()->push_jint(3);
+        current_frame->push_jint(3);
         break;
 
     case iconst_4: //将int型4推送至栈顶
-        current_thread->currentFrame()->push_jint(4);
+        current_frame->push_jint(4);
         break;
 
     case iconst_5: //将int型5推送至栈顶
-        current_thread->currentFrame()->push_jint(5);
+        current_frame->push_jint(5);
         break;
 
     case lconst_0: //将long型0推送至栈顶
-        current_thread->currentFrame()->push_jfloat(0);
+        current_frame->push_jfloat(0);
         break;
 
     case lconst_1: //将long型1推送至栈顶
-        current_thread->currentFrame()->push_jfloat(0);
+        current_frame->push_jfloat(0);
         break;
 
     case fconst_0: //将float型0推送至栈顶
-        current_thread->currentFrame()->push_jfloat(0);
+        current_frame->push_jfloat(0);
         break;
 
     case fconst_1: //将float型1推送至栈顶
-        current_thread->currentFrame()->push_jfloat(1);
+        current_frame->push_jfloat(1);
         break;
 
     case fconst_2: //将float型2推送至栈顶
-        current_thread->currentFrame()->push_jfloat(2);
+        current_frame->push_jfloat(2);
         break;
 
     case dconst_0: //将double型0推送至栈顶
-        current_thread->currentFrame()->push_jdouble(0);
+        current_frame->push_jdouble(0);
         break;
 
     case dconst_1: //将double型1推送至栈顶
-        current_thread->currentFrame()->push_jdouble(1);
+        current_frame->push_jdouble(1);
         break;
 
     case bipush: //将单字节的常量值(-128~127)推送至栈顶
     {
-        jbyte a = current_thread->currentFrame()->get_u1(current_thread->getPC());
-        current_thread->currentFrame()->push_jbyte(a);
+        jbyte a = current_frame->get_u1(current_thread->getPC());
+        current_frame->push_jbyte(a);
         break;
     }
 
     case sipush: //将一个短整型常量值(-32768~32767)推送至栈顶
     {
-        jshort a = current_thread->currentFrame()->get_u2(current_thread->getPC());
-        current_thread->currentFrame()->push_jshort(a);
+        jshort a = current_frame->get_u2(current_thread->getPC());
+        current_frame->push_jshort(a);
         break;
     }
 
@@ -138,29 +139,29 @@ void JVM::interprete(u1 code) //这个函数可以说是虚拟机中最重要的
 
     case iload: //将指定的int型本地变量
     {
-        jint a = current_thread->currentFrame()->load_jint(current_thread->currentFrame()->get_u1(current_thread->getPC()));
-        current_thread->currentFrame()->push_jint(a);
+        jint a = current_frame->load_jint(current_frame->get_u1(current_thread->getPC()));
+        current_frame->push_jint(a);
         break;
     }
 
     case lload: //将指定的long型本地变量
     {
-        jlong a = current_thread->currentFrame()->load_jlong(current_thread->currentFrame()->get_u1(current_thread->getPC()));
-        current_thread->currentFrame()->push_jlong(a);
+        jlong a = current_frame->load_jlong(current_frame->get_u1(current_thread->getPC()));
+        current_frame->push_jlong(a);
         break;
     }
 
     case fload: //将指定的float型本地变量
     {
-        jfloat a = current_thread->currentFrame()->load_jfloat(current_thread->currentFrame()->get_u1(current_thread->getPC()));
-        current_thread->currentFrame()->push_jfloat(a);
+        jfloat a = current_frame->load_jfloat(current_frame->get_u1(current_thread->getPC()));
+        current_frame->push_jfloat(a);
         break;
     }
 
     case dload: //将指定的double型本地变量
     {
-        jdouble a = current_thread->currentFrame()->load_jdouble(current_thread->currentFrame()->get_u1(current_thread->getPC()));
-        current_thread->currentFrame()->push_jdouble(a);
+        jdouble a = current_frame->load_jdouble(current_frame->get_u1(current_thread->getPC()));
+        current_frame->push_jdouble(a);
         break;
     }
 
@@ -168,113 +169,113 @@ void JVM::interprete(u1 code) //这个函数可以说是虚拟机中最重要的
 
     case iload_0: //将第一个int型本地变量
     {
-        jint a = current_thread->currentFrame()->load_jint(0);
-        current_thread->currentFrame()->push_jint(a);
+        jint a = current_frame->load_jint(0);
+        current_frame->push_jint(a);
         break;
     }
 
     case iload_1: //将第二个int型本地变量
     {
-        jint a = current_thread->currentFrame()->load_jint(1);
-        current_thread->currentFrame()->push_jint(a);
+        jint a = current_frame->load_jint(1);
+        current_frame->push_jint(a);
         break;
     }
 
     case iload_2: //将第三个int型本地变量
     {
-        jint a = current_thread->currentFrame()->load_jint(2);
-        current_thread->currentFrame()->push_jint(a);
+        jint a = current_frame->load_jint(2);
+        current_frame->push_jint(a);
         break;
     }
 
     case iload_3: //将第四个int型本地变量
     {
-        jint a = current_thread->currentFrame()->load_jint(3);
-        current_thread->currentFrame()->push_jint(a);
+        jint a = current_frame->load_jint(3);
+        current_frame->push_jint(a);
         break;
     }
 
     case lload_0: //将第一个long型本地变量
     {
-        jlong a = current_thread->currentFrame()->load_jlong(0);
-        current_thread->currentFrame()->push_jlong(a);
+        jlong a = current_frame->load_jlong(0);
+        current_frame->push_jlong(a);
         break;
     }
 
     case lload_1: //将第二个long型本地变量
     {
-        jlong a = current_thread->currentFrame()->load_jlong(1);
-        current_thread->currentFrame()->push_jlong(a);
+        jlong a = current_frame->load_jlong(1);
+        current_frame->push_jlong(a);
         break;
     }
 
     case lload_2: //将第三个long型本地变量
     {
-        jlong a = current_thread->currentFrame()->load_jlong(2);
-        current_thread->currentFrame()->push_jlong(a);
+        jlong a = current_frame->load_jlong(2);
+        current_frame->push_jlong(a);
         break;
     }
 
     case lload_3: //将第四个long型本地变量
     {
-        jlong a = current_thread->currentFrame()->load_jlong(3);
-        current_thread->currentFrame()->push_jlong(a);
+        jlong a = current_frame->load_jlong(3);
+        current_frame->push_jlong(a);
         break;
     }
 
     case fload_0: //将第一个float型本地变量
     {
-        jfloat a = current_thread->currentFrame()->load_jfloat(0);
-        current_thread->currentFrame()->push_jfloat(a);
+        jfloat a = current_frame->load_jfloat(0);
+        current_frame->push_jfloat(a);
         break;
     }
 
     case fload_1: //将第二个float型本地变量
     {
-        jfloat a = current_thread->currentFrame()->load_jfloat(1);
-        current_thread->currentFrame()->push_jfloat(a);
+        jfloat a = current_frame->load_jfloat(1);
+        current_frame->push_jfloat(a);
         break;
     }
 
     case fload_2: //将第三个float型本地变量
     {
-        jfloat a = current_thread->currentFrame()->load_jfloat(2);
-        current_thread->currentFrame()->push_jfloat(a);
+        jfloat a = current_frame->load_jfloat(2);
+        current_frame->push_jfloat(a);
         break;
     }
 
     case fload_3: //将第四个float型本地变量
     {
-        jfloat a = current_thread->currentFrame()->load_jfloat(3);
-        current_thread->currentFrame()->push_jfloat(a);
+        jfloat a = current_frame->load_jfloat(3);
+        current_frame->push_jfloat(a);
         break;
     }
 
     case dload_0: //将第一个double型本地变量
     {
-        jdouble a = current_thread->currentFrame()->load_jdouble(0);
-        current_thread->currentFrame()->push_jdouble(a);
+        jdouble a = current_frame->load_jdouble(0);
+        current_frame->push_jdouble(a);
         break;
     }
 
     case dload_1: //将第二个double型本地变量
     {
-        jdouble a = current_thread->currentFrame()->load_jdouble(1);
-        current_thread->currentFrame()->push_jdouble(a);
+        jdouble a = current_frame->load_jdouble(1);
+        current_frame->push_jdouble(a);
         break;
     }
 
     case dload_2: //将第三个double型本地变量
     {
-        jdouble a = current_thread->currentFrame()->load_jdouble(2);
-        current_thread->currentFrame()->push_jdouble(a);
+        jdouble a = current_frame->load_jdouble(2);
+        current_frame->push_jdouble(a);
         break;
     }
 
     case dload_3: //将第四个double型本地变量
     {
-        jdouble a = current_thread->currentFrame()->load_jdouble(3);
-        current_thread->currentFrame()->push_jdouble(a);
+        jdouble a = current_frame->load_jdouble(3);
+        current_frame->push_jdouble(a);
         break;
     }
 
@@ -303,46 +304,130 @@ void JVM::interprete(u1 code) //这个函数可以说是虚拟机中最重要的
     case saload: //将short型数组指定索引的值推送至栈顶
 
     case istore: //将栈顶int型数值存入指定本地变量
+    {
+        jint a = current_frame->pop_jint();
+        current_frame->store_jint(current_frame->get_u1(current_thread->getPC()),a);
+        break;
+    }
 
     case lstore: //将栈顶long型数值存入指定本地变量
+    {
+        jlong a = current_frame->pop_jlong();
+        current_frame->store_jlong(current_frame->get_u1(current_thread->getPC()),a);
+        break;
+    }
 
     case fstore: //将栈顶float型数值存入指定本地变量
+    {
+        jfloat a = current_frame->pop_jfloat();
+        current_frame->store_jfloat(current_frame->get_u1(current_thread->getPC()),a);
+        break;
+    }
 
     case dstore: //将栈顶double型数值存入指定本地变量
+    {
+        jdouble a = current_frame->pop_jdouble();
+        current_frame->store_jdouble(current_frame->get_u1(current_thread->getPC()),a);
+        break;
+    }
 
     case astore: //将栈顶引用型数值存入指定本地变量
 
     case istore_0: //将栈顶int型数值存入第一个本地变量
+    {
+        current_frame->store_jint(0,current_frame->pop_jint());
+        break;
+    }
 
     case istore_1: //将栈顶int型数值存入第二个本地变量
+    {
+        current_frame->store_jint(1,current_frame->pop_jint());
+        break;
+    }
 
     case istore_2: //将栈顶int型数值存入第三个本地变量
+    {
+        current_frame->store_jint(2,current_frame->pop_jint());
+        break;
+    }
 
     case istore_3: //将栈顶int型数值存入第四个本地变量
+    {
+        current_frame->store_jint(3,current_frame->pop_jint());
+        break;
+    }
 
     case lstore_0: //将栈顶long型数值存入第一个本地变量
+    {
+        current_frame->store_jlong(0,current_frame->pop_jlong());
+        break;
+    }
 
     case lstore_1: //将栈顶long型数值存入第二个本地变量
+    {
+        current_frame->store_jlong(1,current_frame->pop_jlong());
+        break;
+    }
 
     case lstore_2: //将栈顶long型数值存入第三个本地变量
+    {
+        current_frame->store_jlong(2,current_frame->pop_jlong());
+        break;
+    }
 
     case lstore_3: //将栈顶long型数值存入第四个本地变量
+    {
+        current_frame->store_jlong(3,current_frame->pop_jlong());
+        break;
+    }
 
     case fstore_0: //将栈顶float型数值存入第一个本地变量
+    {
+        current_frame->store_jfloat(0,current_frame->pop_jfloat());
+        break;
+    }
 
     case fstore_1: //将栈顶float型数值存入第二个本地变量
+    {
+        current_frame->store_jfloat(1,current_frame->pop_jfloat());
+        break;
+    }
 
     case fstore_2: //将栈顶float型数值存入第三个本地变量
+    {
+        current_frame->store_jfloat(2,current_frame->pop_jfloat());
+        break;
+    }
 
     case fstore_3: //将栈顶float型数值存入第四个本地变量
+    {
+        current_frame->store_jfloat(3,current_frame->pop_jfloat());
+        break;
+    }
 
     case dstore_0: //将栈顶double型数值存入第一个本地变量
+    {
+        current_frame->store_jdouble(0,current_frame->pop_jdouble());
+        break;
+    }
 
     case dstore_1: //将栈顶double型数值存入第二个本地变量
+    {
+        current_frame->store_jfloat(1,current_frame->pop_jfloat());
+        break;
+    }
 
     case dstore_2: //将栈顶double型数值存入第三个本地变量
+    {
+        current_frame->store_jfloat(2,current_frame->pop_jfloat());
+        break;
+    }
 
     case dstore_3: //将栈顶double型数值存入第四个本地变量
+    {
+        current_frame->store_jfloat(3,current_frame->pop_jfloat());
+        break;
+    }
 
     case astore_0: //将栈顶引用型数值存入第一个本地变量
 

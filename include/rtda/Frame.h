@@ -31,6 +31,15 @@ public:
     void push_jfloat(jfloat a);
     void push_jdouble(jdouble a);
 
+    jint pop_jint();
+    jbyte pop_jbyte();
+    jboolean pop_jboolean();
+    jchar pop_jchar();
+    jshort pop_jshort();
+    jlong pop_jlong();
+    jfloat pop_jfloat();
+    jdouble pop_jdouble();
+
     //对本地变量表的一些操作
     jint load_jint(u2 shift);
     jbyte load_jbyte(u2 shift);
@@ -40,6 +49,15 @@ public:
     jfloat load_jfloat(u2 shift);
     jlong load_jlong(u2 shift);
     jdouble load_jdouble(u2 shift);
+
+    jint store_jint(u2 shift,jint a);
+    jbyte store_jbyte(u2 shift, jbyte a);
+    jboolean store_jboolean(u2 shift,jboolean a);
+    jchar store_jchar(u2 shift,jchar a);
+    jshort store_jshort(u2 shift,jshort a);
+    jfloat store_jfloat(u2 shift,jfloat a);
+    jlong store_jlong(u2 shift,jlong a);
+    jdouble store_jdouble(u2 shift,jdouble a);
 
     ~Frame();
 };
