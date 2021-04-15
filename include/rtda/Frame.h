@@ -31,6 +31,16 @@ public:
     void push_jfloat(jfloat a);
     void push_jdouble(jdouble a);
 
+    void pop();
+    void pop2();
+    void dup();//复制栈顶数值并将两个复制值压入栈顶（不能是long和double）
+    void dup_x1();
+    void dup_x2();
+    void dup2();//复制栈顶数值（long,doubel)并将两个复制值压入栈顶
+    void dup2_x1();
+    void dup2_x2();
+    void swap();
+
     jint pop_jint();
     jbyte pop_jbyte();
     jboolean pop_jboolean();
@@ -50,14 +60,14 @@ public:
     jlong load_jlong(u2 shift);
     jdouble load_jdouble(u2 shift);
 
-    jint store_jint(u2 shift,jint a);
-    jbyte store_jbyte(u2 shift, jbyte a);
-    jboolean store_jboolean(u2 shift,jboolean a);
-    jchar store_jchar(u2 shift,jchar a);
-    jshort store_jshort(u2 shift,jshort a);
-    jfloat store_jfloat(u2 shift,jfloat a);
-    jlong store_jlong(u2 shift,jlong a);
-    jdouble store_jdouble(u2 shift,jdouble a);
+    void store_jint(u2 shift,jint a);
+    void store_jbyte(u2 shift, jbyte a);
+    void store_jboolean(u2 shift,jboolean a);
+    void store_jchar(u2 shift,jchar a);
+    void store_jshort(u2 shift,jshort a);
+    void store_jfloat(u2 shift,jfloat a);
+    void store_jlong(u2 shift,jlong a);
+    void store_jdouble(u2 shift,jdouble a);
 
     ~Frame();
 };

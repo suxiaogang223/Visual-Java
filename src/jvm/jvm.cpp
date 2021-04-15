@@ -306,28 +306,28 @@ void JVM::interprete(u1 code) //这个函数可以说是虚拟机中最重要的
     case istore: //将栈顶int型数值存入指定本地变量
     {
         jint a = current_frame->pop_jint();
-        current_frame->store_jint(current_frame->get_u1(current_thread->getPC()),a);
+        current_frame->store_jint(current_frame->get_u1(current_thread->getPC()), a);
         break;
     }
 
     case lstore: //将栈顶long型数值存入指定本地变量
     {
         jlong a = current_frame->pop_jlong();
-        current_frame->store_jlong(current_frame->get_u1(current_thread->getPC()),a);
+        current_frame->store_jlong(current_frame->get_u1(current_thread->getPC()), a);
         break;
     }
 
     case fstore: //将栈顶float型数值存入指定本地变量
     {
         jfloat a = current_frame->pop_jfloat();
-        current_frame->store_jfloat(current_frame->get_u1(current_thread->getPC()),a);
+        current_frame->store_jfloat(current_frame->get_u1(current_thread->getPC()), a);
         break;
     }
 
     case dstore: //将栈顶double型数值存入指定本地变量
     {
         jdouble a = current_frame->pop_jdouble();
-        current_frame->store_jdouble(current_frame->get_u1(current_thread->getPC()),a);
+        current_frame->store_jdouble(current_frame->get_u1(current_thread->getPC()), a);
         break;
     }
 
@@ -335,97 +335,97 @@ void JVM::interprete(u1 code) //这个函数可以说是虚拟机中最重要的
 
     case istore_0: //将栈顶int型数值存入第一个本地变量
     {
-        current_frame->store_jint(0,current_frame->pop_jint());
+        current_frame->store_jint(0, current_frame->pop_jint());
         break;
     }
 
     case istore_1: //将栈顶int型数值存入第二个本地变量
     {
-        current_frame->store_jint(1,current_frame->pop_jint());
+        current_frame->store_jint(1, current_frame->pop_jint());
         break;
     }
 
     case istore_2: //将栈顶int型数值存入第三个本地变量
     {
-        current_frame->store_jint(2,current_frame->pop_jint());
+        current_frame->store_jint(2, current_frame->pop_jint());
         break;
     }
 
     case istore_3: //将栈顶int型数值存入第四个本地变量
     {
-        current_frame->store_jint(3,current_frame->pop_jint());
+        current_frame->store_jint(3, current_frame->pop_jint());
         break;
     }
 
     case lstore_0: //将栈顶long型数值存入第一个本地变量
     {
-        current_frame->store_jlong(0,current_frame->pop_jlong());
+        current_frame->store_jlong(0, current_frame->pop_jlong());
         break;
     }
 
     case lstore_1: //将栈顶long型数值存入第二个本地变量
     {
-        current_frame->store_jlong(1,current_frame->pop_jlong());
+        current_frame->store_jlong(1, current_frame->pop_jlong());
         break;
     }
 
     case lstore_2: //将栈顶long型数值存入第三个本地变量
     {
-        current_frame->store_jlong(2,current_frame->pop_jlong());
+        current_frame->store_jlong(2, current_frame->pop_jlong());
         break;
     }
 
     case lstore_3: //将栈顶long型数值存入第四个本地变量
     {
-        current_frame->store_jlong(3,current_frame->pop_jlong());
+        current_frame->store_jlong(3, current_frame->pop_jlong());
         break;
     }
 
     case fstore_0: //将栈顶float型数值存入第一个本地变量
     {
-        current_frame->store_jfloat(0,current_frame->pop_jfloat());
+        current_frame->store_jfloat(0, current_frame->pop_jfloat());
         break;
     }
 
     case fstore_1: //将栈顶float型数值存入第二个本地变量
     {
-        current_frame->store_jfloat(1,current_frame->pop_jfloat());
+        current_frame->store_jfloat(1, current_frame->pop_jfloat());
         break;
     }
 
     case fstore_2: //将栈顶float型数值存入第三个本地变量
     {
-        current_frame->store_jfloat(2,current_frame->pop_jfloat());
+        current_frame->store_jfloat(2, current_frame->pop_jfloat());
         break;
     }
 
     case fstore_3: //将栈顶float型数值存入第四个本地变量
     {
-        current_frame->store_jfloat(3,current_frame->pop_jfloat());
+        current_frame->store_jfloat(3, current_frame->pop_jfloat());
         break;
     }
 
     case dstore_0: //将栈顶double型数值存入第一个本地变量
     {
-        current_frame->store_jdouble(0,current_frame->pop_jdouble());
+        current_frame->store_jdouble(0, current_frame->pop_jdouble());
         break;
     }
 
     case dstore_1: //将栈顶double型数值存入第二个本地变量
     {
-        current_frame->store_jfloat(1,current_frame->pop_jfloat());
+        current_frame->store_jfloat(1, current_frame->pop_jfloat());
         break;
     }
 
     case dstore_2: //将栈顶double型数值存入第三个本地变量
     {
-        current_frame->store_jfloat(2,current_frame->pop_jfloat());
+        current_frame->store_jfloat(2, current_frame->pop_jfloat());
         break;
     }
 
     case dstore_3: //将栈顶double型数值存入第四个本地变量
     {
-        current_frame->store_jfloat(3,current_frame->pop_jfloat());
+        current_frame->store_jfloat(3, current_frame->pop_jfloat());
         break;
     }
 
@@ -454,126 +454,324 @@ void JVM::interprete(u1 code) //这个函数可以说是虚拟机中最重要的
     case sastore: //将栈顶short型数值存入指定数组的指定索引位置
 
     case pop: //将栈顶数值弹出(数值不能是long或double类型的)
+        current_frame->pop();
+        break;
 
     case pop2: //将栈顶的一（long或double类型的)或两个数值弹出（其它）
+        current_frame->pop2();
+        break;
 
     case dup_: //复制栈顶数值并将复制值压入栈顶
+        current_frame->dup();
+        break;
 
     case dup_x1: //复制栈顶数值并将两个复制值压入栈顶
+        current_frame->dup_x1();
+        break;
 
     case dup_x2: //复制栈顶数值并将三个（或两个）复制值压入栈顶
+        current_frame->dup_x2();
+        break;
 
     case dup2_: //复制栈顶一个（long或double类型的)或两个（其它）数值并将复制值压入栈顶
+        current_frame->dup2();
+        break;
 
     case dup2_x1: //dup_x1指令的双倍版本
+        current_frame->dup2_x1();
+        break;
 
     case dup2_x2: //dup_x2指令的双倍版本
+        current_frame->dup2_x2();
+        break;
 
     case swap_: //将栈最顶端的两个数值互换(数值不能是long或double类型的)
+        current_frame->swap();
+        break;
 
     case iadd: //将栈顶两int型数值相加并将结果压入栈顶
+        current_frame->push_jint(current_frame->pop_jint() + current_frame->pop_jint());
+        break;
 
     case ladd: //将栈顶两long型数值相加并将结果压入栈顶
+        current_frame->push_jlong(current_frame->pop_jlong() + current_frame->pop_jlong());
+        break;
 
     case fadd: //将栈顶两float型数值相加并将结果压入栈顶
+        current_frame->push_jfloat(current_frame->pop_jfloat() + current_frame->pop_jfloat());
+        break;
 
     case dadd: //将栈顶两double型数值相加并将结果压入栈顶
+        current_frame->push_jdouble(current_frame->pop_jdouble() + current_frame->pop_jdouble());
+        break;
 
     case is: //将栈顶两int型数值相减并将结果压入栈顶
+    {
+        jint a = current_frame->pop_jint();
+        jint b = current_frame->pop_jint();
+        current_frame->push_jint(a - b);
+        break;
+    }
 
     case ls: //将栈顶两long型数值相减并将结果压入栈顶
+    {
+        jlong a = current_frame->pop_jlong();
+        jlong b = current_frame->pop_jlong();
+        current_frame->push_jlong(a - b);
+        break;
+    }
 
     case fs: //将栈顶两float型数值相减并将结果压入栈顶
+    {
+        jfloat a = current_frame->pop_jfloat();
+        jfloat b = current_frame->pop_jfloat();
+        current_frame->push_jfloat(a - b);
+        break;
+    }
 
     case ds: //将栈顶两double型数值相减并将结果压入栈顶
+    {
+        jdouble a = current_frame->pop_jdouble();
+        jdouble b = current_frame->pop_jdouble();
+        current_frame->push_jdouble(a - b);
+        break;
+    }
 
     case imul: //将栈顶两int型数值相乘并将结果压入栈顶
+        current_frame->push_jint(current_frame->pop_jint() * current_frame->pop_jint());
+        break;
 
     case lmul: //将栈顶两long型数值相乘并将结果压入栈顶
+        current_frame->push_jlong(current_frame->pop_jlong() * current_frame->pop_jlong());
+        break;
 
     case fmul: //将栈顶两float型数值相乘并将结果压入栈顶
+        current_frame->push_jfloat(current_frame->pop_jfloat() * current_frame->pop_jfloat());
+        break;
 
     case dmul: //将栈顶两double型数值相乘并将结果压入栈顶
+        current_frame->push_jdouble(current_frame->pop_jdouble() * current_frame->pop_jdouble());
+        break;
 
     case idiv: //将栈顶两int型数值相除并将结果压入栈顶
+    {
+        jint a = current_frame->pop_jint();
+        jint b = current_frame->pop_jint();
+        current_frame->push_jint(a / b);
+        break;
+    }
 
     case ldiv_: //将栈顶两long型数值相除并将结果压入栈顶
+    {
+        jlong a = current_frame->pop_jlong();
+        jlong b = current_frame->pop_jlong();
+        current_frame->push_jlong(a / b);
+        break;
+    }
 
     case fdiv: //将栈顶两float型数值相除并将结果压入栈顶
+    {
+        jfloat a = current_frame->pop_jfloat();
+        jfloat b = current_frame->pop_jfloat();
+        current_frame->push_jfloat(a / b);
+        break;
+    }
 
     case ddiv: //将栈顶两double型数值相除并将结果压入栈顶
+    {
+        jdouble a = current_frame->pop_jdouble();
+        jdouble b = current_frame->pop_jdouble();
+        current_frame->push_jdouble(a / b);
+        break;
+    }
 
     case irem: //将栈顶两int型数值作取模运算并将结果压入栈顶
+    {
+        jint a = current_frame->pop_jint();
+        jint b = current_frame->pop_jint();
+        current_frame->push_jint(a % b);
+        break;
+    }
 
     case lrem: //将栈顶两long型数值作取模运算并将结果压入栈顶
+    {
+        jlong a = current_frame->pop_jlong();
+        jlong b = current_frame->pop_jlong();
+        current_frame->push_jlong(a % b);
+        break;
+    }
 
     case frem: //将栈顶两float型数值作取模运算并将结果压入栈顶
+    {
+        jfloat a = current_frame->pop_jfloat();
+        jfloat b = current_frame->pop_jfloat();
+        current_frame->push_jfloat((jfloat)((jint)a % (jint)b)); //flaot类型取模运算？意义何在？
+        break;
+    }
 
     case drem: //将栈顶两double型数值作取模运算并将结果压入栈顶
+    {
+        jdouble a = current_frame->pop_jdouble();
+        jdouble b = current_frame->pop_jdouble();
+        current_frame->push_jdouble((jdouble)((jlong)a % (jlong)b)); //double类型取模运算？意义何在？
+        break;
+    }
 
     case ineg: //将栈顶int型数值取负并将结果压入栈顶
+        current_frame->push_jint(-current_frame->pop_jint());
+        break;
 
     case lneg: //将栈顶long型数值取负并将结果压入栈顶
+        current_frame->push_jlong(-current_frame->pop_jlong());
+        break;
 
     case fneg: //将栈顶float型数值取负并将结果压入栈顶
+        current_frame->push_jfloat(-current_frame->pop_jfloat());
+        break;
 
     case dneg: //将栈顶double型数值取负并将结果压入栈顶
+        current_frame->push_jdouble(-current_frame->pop_jdouble());
+        break;
 
     case ishl: //将int型数值左移位指定位数并将结果压入栈顶
+    {
+        jint b = current_frame->pop_jint();
+        jint a = current_frame->pop_jint();
+        current_frame->push_jint(a << b);
+        break;
+    }
 
     case lshl: //将long型数值左移位指定位数并将结果压入栈顶
+    {
+        jint b = current_frame->pop_jint();
+        jlong a = current_frame->pop_jlong();
+        current_frame->push_jlong(a << b);
+        break;
+    }
 
     case ishr: //将int型数值右（符号）移位指定位数并将结果压入栈顶
+    {
+        jint b = current_frame->pop_jint();
+        jint a = current_frame->pop_jint();
+        current_frame->push_jint(a >> b);
+        break;
+    }
 
     case lshr: //将long型数值右（符号）移位指定位数并将结果压入栈顶
+    {
+        jint b = current_frame->pop_jint();
+        jlong a = current_frame->pop_jlong();
+        current_frame->push_jlong(a >> b);
+        break;
+    }
 
     case iushr: //将int型数值右（无符号）移位指定位数并将结果压入栈顶
+    {
+        jint b = current_frame->pop_jint();
+        jint a = current_frame->pop_jint();
+        current_frame->push_jint((u4)a >> b);
+        break;
+    }
 
     case lushr: //将long型数值右（无符号）移位指定位数并将结果压入栈顶
+    {
+        jint b = current_frame->pop_jint();
+        jlong a = current_frame->pop_jlong();
+        current_frame->push_jlong((u8)a >> b);
+        break;
+    }
 
     case iand: //将栈顶两int型数值作“按位与”并将结果压入栈顶
+        current_frame->push_jint(current_frame->pop_jint() & current_frame->pop_jint());
+        break;
 
     case land: //将栈顶两long型数值作“按位与”并将结果压入栈顶
+        current_frame->push_jlong(current_frame->pop_jlong() & current_frame->pop_jlong());
+        break;
 
     case ior: //将栈顶两int型数值作“按位或”并将结果压入栈顶
+        current_frame->push_jint(current_frame->pop_jint() | current_frame->pop_jint());
+        break;
 
     case lor: //将栈顶两long型数值作“按位或”并将结果压入栈顶
+        current_frame->push_jlong(current_frame->pop_jlong() | current_frame->pop_jlong());
+        break;
 
     case ixor: //将栈顶两int型数值作“按位异或”并将结果压入栈顶
+        current_frame->push_jint(current_frame->pop_jint() ^ current_frame->pop_jint());
+        break;
 
     case lxor: //将栈顶两long型数值作“按位异或”并将结果压入栈顶
+        current_frame->push_jlong(current_frame->pop_jlong() ^ current_frame->pop_jlong());
+        break;
 
     case iinc: //将指定int型变量增加指定值（i++,i–,i+=2）
+    {
+        jbyte inc = current_frame->get_u1(current_thread->getPC());
+        u1 index = current_frame->get_u1(current_thread->getPC() + 1);
+        current_frame->store_jint(index, current_frame->load_jint(index) + inc);
+        break;
+    }
 
     case i2l: //将栈顶int型数值强制转换成long型数值并将结果压入栈顶
+        current_frame->push_jlong(current_frame->pop_jint());
+        break;
 
     case i2f: //将栈顶int型数值强制转换成float型数值并将结果压入栈顶
+        current_frame->push_jfloat(current_frame->pop_jint());
+        break;
 
     case i2d: //将栈顶int型数值强制转换成double型数值并将结果压入栈顶
+        current_frame->push_jdouble(current_frame->pop_jint());
+        break;
 
     case l2i: //将栈顶long型数值强制转换成int型数值并将结果压入栈顶
+        current_frame->push_jint(current_frame->pop_jlong());
+        break;
 
     case l2f: //将栈顶long型数值强制转换成float型数值并将结果压入栈顶
+        current_frame->push_jfloat(current_frame->pop_jlong());
+        break;
 
     case l2d: //将栈顶long型数值强制转换成double型数值并将结果压入栈顶
+        current_frame->push_jdouble(current_frame->pop_jlong());
+        break;
 
     case f2i: //将栈顶float型数值强制转换成int型数值并将结果压入栈顶
+        current_frame->push_jint(current_frame->pop_jfloat());
+        break;
 
     case f2l: //将栈顶float型数值强制转换成long型数值并将结果压入栈顶
+        current_frame->push_jlong(current_frame->pop_jfloat());
+        break;
 
     case f2d: //将栈顶float型数值强制转换成double型数值并将结果压入栈顶
+        current_frame->push_jdouble(current_frame->pop_jfloat());
+        break;
 
     case d2i: //将栈顶double型数值强制转换成int型数值并将结果压入栈顶
+        current_frame->push_jint(current_frame->pop_jdouble());
+        break;
 
     case d2l: //将栈顶double型数值强制转换成long型数值并将结果压入栈顶
+        current_frame->push_jlong(current_frame->pop_jdouble());
+        break;
 
     case d2f: //将栈顶double型数值强制转换成float型数值并将结果压入栈顶
+        current_frame->push_jfloat(current_frame->pop_jdouble());
+        break;
 
     case i2b: //将栈顶int型数值强制转换成byte型数值并将结果压入栈顶
+        current_frame->push_jbyte(current_frame->pop_jint());
+        break;
 
     case i2c: //将栈顶int型数值强制转换成char型数值并将结果压入栈顶
+        current_frame->push_jchar(current_frame->pop_jint());
+        break;
 
     case i2s: //将栈顶int型数值强制转换成short型数值并将结果压入栈顶
+        current_frame->push_jshort(current_frame->pop_jint());
+        break;
 
     case lcmp: //比较栈顶两long型数值大小，并将结果（1，0，-1）压入栈顶
 

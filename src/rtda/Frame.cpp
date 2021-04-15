@@ -112,6 +112,90 @@ void Frame::push_jdouble(jdouble a)
     operandStack->push(byte64._u4[1]);
 }
 
+void Frame::pop()
+{
+    operandStack->pop();
+}
+
+void Frame::pop2()
+{
+    operandStack->pop();
+    operandStack->pop();
+}
+
+void Frame::dup()
+{
+    u4 a = operandStack->getTop();
+    operandStack->push(a);
+}
+
+void Frame::dup_x1()
+{
+    u4 a = operandStack->getTop();
+    operandStack->push(a);
+    operandStack->push(a);
+}
+
+void Frame::dup_x2()
+{
+    u4 a = operandStack->getTop();
+    operandStack->push(a);
+    operandStack->push(a);
+    operandStack->push(a);
+
+}
+
+void Frame::dup2()
+{
+    u4 a = operandStack->getTop();
+    operandStack->pop();
+    u4 b = operandStack->getTop();
+
+    operandStack->push(a);
+    operandStack->push(b);
+    operandStack->push(a);
+}
+
+void Frame::dup2_x1()
+{
+    u4 a = operandStack->getTop();
+    operandStack->pop();
+    u4 b = operandStack->getTop();
+
+    operandStack->push(a);
+    operandStack->push(b);
+    operandStack->push(a);
+    operandStack->push(b);
+    operandStack->push(a);
+
+}
+
+void Frame::dup2_x2()
+{
+    u4 a = operandStack->getTop();
+    operandStack->pop();
+    u4 b = operandStack->getTop();
+
+    operandStack->push(a);
+    operandStack->push(b);
+    operandStack->push(a);
+    operandStack->push(b);
+    operandStack->push(a);
+    operandStack->push(b);
+    operandStack->push(a);
+}
+
+void Frame::swap()
+{
+    u4 a = operandStack->getTop();
+    operandStack->pop();
+    u4 b = operandStack->getTop();
+    operandStack->pop();
+
+    operandStack->push(a);
+    operandStack->push(b);
+}
+
 jint Frame::pop_jint()
 {
     byte_32 byte32;
@@ -226,50 +310,50 @@ jdouble Frame::load_jdouble(u2 shift)
     return byte64._jdouble;
 }
 
-jint Frame::store_jint(u2 shift, jint a)
+void Frame::store_jint(u2 shift, jint a)
 {
     byte_32 byte32;
     byte32._jint = a;
     localVars->store(shift, byte32._u4);
 }
-jbyte Frame::store_jbyte(u2 shift, jbyte a)
+void Frame::store_jbyte(u2 shift, jbyte a)
 {
     byte_32 byte32;
     byte32._jbyte = a;
     localVars->store(shift, byte32._u4);
 }
-jboolean Frame::store_jboolean(u2 shift, jboolean a)
+void Frame::store_jboolean(u2 shift, jboolean a)
 {
     byte_32 byte32;
     byte32._jboolean = a;
     localVars->store(shift, byte32._u4);
 }
-jchar Frame::store_jchar(u2 shift, jchar a)
+void Frame::store_jchar(u2 shift, jchar a)
 {
     byte_32 byte32;
     byte32._jchar = a;
     localVars->store(shift, byte32._u4);
 }
-jshort Frame::store_jshort(u2 shift, jshort a)
+void Frame::store_jshort(u2 shift, jshort a)
 {
     byte_32 byte32;
     byte32._jshort = a;
     localVars->store(shift, byte32._u4);
 }
-jfloat Frame::store_jfloat(u2 shift, jfloat a)
+void Frame::store_jfloat(u2 shift, jfloat a)
 {
     byte_32 byte32;
     byte32._jfloat = a;
     localVars->store(shift, byte32._u4);
 }
-jlong Frame::store_jlong(u2 shift, jlong a)
+void Frame::store_jlong(u2 shift, jlong a)
 {
     byte_64 byte64;
     byte64._jlong = a;
     localVars->store(shift, byte64._u4[0]);
     localVars->store(shift + 1, byte64._u4[1]);
 }
-jdouble Frame::store_jdouble(u2 shift, jdouble a)
+void Frame::store_jdouble(u2 shift, jdouble a)
 {
     byte_64 byte64;
     byte64._jdouble = a;
