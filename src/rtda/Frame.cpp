@@ -48,11 +48,6 @@ u4 Frame::get_u4(u4 pc)
     return a._u4;
 }
 
-Frame::~Frame()
-{
-    free(localVars);
-    free(operandStack);
-}
 
 void Frame::push_jbyte(jbyte a)
 {
@@ -359,4 +354,10 @@ void Frame::store_jdouble(u2 shift, jdouble a)
     byte64._jdouble = a;
     localVars->store(shift, byte64._u4[0]);
     localVars->store(shift + 1, byte64._u4[1]);
+}
+
+Frame::~Frame()
+{
+    free(localVars);
+    free(operandStack);
 }

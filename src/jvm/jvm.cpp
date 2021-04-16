@@ -1,5 +1,7 @@
 #include "jvm.h"
 
+u4 JVM::opcode_length[] = JVM_OPCODE_LENGTH_INITIALIZER; //每个指令的长度
+
 JVM::JVM(Cmd &cmd)
 {
     this->main_class_name = cmd.getClassName();
@@ -22,7 +24,6 @@ void JVM::init()
 void JVM::run()
 {
     string commend;
-    u4 opcode_length[] = JVM_OPCODE_LENGTH_INITIALIZER; //每条指令的长度
     while (cin >> commend)
     {
         if (!current_frame)
@@ -33,9 +34,8 @@ void JVM::run()
         else if (commend == "next")
         {
             u4 pc = current_thread->getPC();
-            Frame *current_frame = current_frame;
-            u1 code = (u1)current_frame->get_code(pc);
-            interprete(code); //解析指令
+            u1 code = (u1)current_frame->get_code(pc); //获取指令
+            interprete(code);                          //解析指令
             pc += opcode_length[code];
             current_thread->setPC(pc); //设置pc
         }
@@ -774,44 +774,165 @@ void JVM::interprete(u1 code) //这个函数可以说是虚拟机中最重要的
         break;
 
     case lcmp: //比较栈顶两long型数值大小，并将结果（1，0，-1）压入栈顶
+    {
+        jlong b = current_frame->pop_jlong();
+        jlong a = current_frame->pop_jlong();
+        if (a > b)
+            current_frame->push_jint(1);
+        else if (a == b)
+            current_frame->push_jint(0);
+        else
+            current_frame->push_jint(-1);
+        break;
+    }
 
     case fcmpl: //比较栈顶两float型数值大小，并将结果（1，0，-1）压入栈顶；当其中一个数值为NaN时，将-1压入栈顶
+    {
+        //todo NaN没有实现
+        jfloat b = current_frame->pop_jfloat();
+        jfloat a = current_frame->pop_jfloat();
+        if (a > b)
+            current_frame->push_jint(1);
+        else if (a == b)
+            current_frame->push_jint(0);
+        else
+            current_frame->push_jint(-1);
+        break;
+    }
 
     case fcmpg: //比较栈顶两float型数值大小，并将结果（1，0，-1）压入栈顶；当其中一个数值为NaN时，将1压入栈顶
+    {
+        //todo NaN没有实现
+        jfloat b = current_frame->pop_jfloat();
+        jfloat a = current_frame->pop_jfloat();
+        if (a > b)
+            current_frame->push_jint(1);
+        else if (a == b)
+            current_frame->push_jint(0);
+        else
+            current_frame->push_jint(-1);
+        break;
+    }
 
     case dcmpl: //比较栈顶两double型数值大小，并将结果（1，0，-1）压入栈顶；当其中一个数值为NaN时，将-1压入栈顶
+    {
+        //todo NaN没有实现
+        jdouble b = current_frame->pop_jdouble();
+        jdouble a = current_frame->pop_jdouble();
+        if (a > b)
+            current_frame->push_jint(1);
+        else if (a == b)
+            current_frame->push_jint(0);
+        else
+            current_frame->push_jint(-1);
+        break;
+    }
 
     case dcmpg: //比较栈顶两double型数值大小，并将结果（1，0，-1）压入栈顶；当其中一个数值为NaN时，将1压入栈顶
+    {
+        //todo NaN没有实现
+        jdouble b = current_frame->pop_jdouble();
+        jdouble a = current_frame->pop_jdouble();
+        if (a > b)
+            current_frame->push_jint(1);
+        else if (a == b)
+            current_frame->push_jint(0);
+        else
+            current_frame->push_jint(-1);
+        break;
+    }
 
     case ifeq: //当栈顶int型数值等于0时跳转
+        if (current_frame->pop_jint() == 0)
+            current_thread->setPC(current_frame->get_u2(current_thread->getPC()) - opcode_length[code]); //TODO当减法结果为负数时会不会出现错误？
+        break;
 
     case ifne: //当栈顶int型数值不等于0时跳转
+        if (current_frame->pop_jint() != 0)
+            current_thread->setPC(current_frame->get_u2(current_thread->getPC()) - opcode_length[code]); //TODO当减法结果为负数时会不会出现错误？
+        break;
 
     case iflt: //当栈顶int型数值小于0时跳转
+        if (current_frame->pop_jint() < 0)
+            current_thread->setPC(current_frame->get_u2(current_thread->getPC()) - opcode_length[code]); //TODO当减法结果为负数时会不会出现错误？
+        break;
 
     case ifge: //当栈顶int型数值大于等于0时跳转
+        if (current_frame->pop_jint() >= 0)
+            current_thread->setPC(current_frame->get_u2(current_thread->getPC()) - opcode_length[code]); //TODO当减法结果为负数时会不会出现错误？
+        break;
 
     case ifgt: //当栈顶int型数值大于0时跳转
+        if (current_frame->pop_jint() > 0)
+            current_thread->setPC(current_frame->get_u2(current_thread->getPC()) - opcode_length[code]); //TODO当减法结果为负数时会不会出现错误？
+        break;
 
     case ifle: //当栈顶int型数值小于等于0时跳转
+        if (current_frame->pop_jint() <= 0)
+            current_thread->setPC(current_frame->get_u2(current_thread->getPC()) - opcode_length[code]); //TODO当减法结果为负数时会不会出现错误？
+        break;
 
     case if_icmpeq: //比较栈顶两int型数值大小，当结果等于0时跳转
+    {
+        jint b = current_frame->pop_jint();
+        jint a = current_frame->pop_jint();
+        if (a - b == 0)
+            current_thread->setPC(current_frame->get_u2(current_thread->getPC()) - opcode_length[code]);
+        break;
+    }
 
     case if_icmpne: //比较栈顶两int型数值大小，当结果不等于0时跳转
+    {
+        jint b = current_frame->pop_jint();
+        jint a = current_frame->pop_jint();
+        if (a - b != 0)
+            current_thread->setPC(current_frame->get_u2(current_thread->getPC()) - opcode_length[code]);
+        break;
+    }
 
     case if_icmplt: //比较栈顶两int型数值大小，当结果小于0时跳转
+    {
+        jint b = current_frame->pop_jint();
+        jint a = current_frame->pop_jint();
+        if (a - b < 0)
+            current_thread->setPC(current_frame->get_u2(current_thread->getPC()) - opcode_length[code]);
+        break;
+    }
 
     case if_icmpge: //比较栈顶两int型数值大小，当结果大于等于0时跳转
+    {
+        jint b = current_frame->pop_jint();
+        jint a = current_frame->pop_jint();
+        if (a - b >= 0)
+            current_thread->setPC(current_frame->get_u2(current_thread->getPC()) - opcode_length[code]);
+        break;
+    }
 
     case if_icmpgt: //比较栈顶两int型数值大小，当结果大于0时跳转
+    {
+        jint b = current_frame->pop_jint();
+        jint a = current_frame->pop_jint();
+        if (a - b > 0)
+            current_thread->setPC(current_frame->get_u2(current_thread->getPC()) - opcode_length[code]);
+        break;
+    }
 
     case if_icmple: //比较栈顶两int型数值大小，当结果小于等于0时跳转
+    {
+        jint b = current_frame->pop_jint();
+        jint a = current_frame->pop_jint();
+        if (a - b <= 0)
+            current_thread->setPC(current_frame->get_u2(current_thread->getPC()) - opcode_length[code]);
+        break;
+    }
 
     case if_acmpeq: //比较栈顶两引用型数值，当结果相等时跳转
 
     case if_acmpne: //比较栈顶两引用型数值，当结果不相等时跳转
 
     case goto_: //无条件跳转
+        current_thread->setPC(current_frame->get_u2(current_thread->getPC()) - opcode_length[code]);
+        break;
 
     case jsr: //跳转至指定16位offset位置，并将jsr下一条指令地址压入栈顶
 

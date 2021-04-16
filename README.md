@@ -7,5 +7,4 @@ TODO typedef_translate.h 最后需要被删除
 
 
 ## 堆的设计
-
-将classfile.h划归到classLoader模块，堆使用可管理内存式的方式管理。
+TODO 关于类实例的存储方式还未找到解决方案

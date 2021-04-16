@@ -17,6 +17,8 @@ private:
     Thread* current_thread;
     Frame* current_frame;
     void interprete(u1 code);
+
+    static u4 opcode_length[]; //每条指令的长度
     
 
 public:
