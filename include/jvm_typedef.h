@@ -2,7 +2,8 @@
  #include <stdint.h>//此头文件里包含了uint8_t等跨平台类型
 
 //在虚拟机内部存储的都是字节
-//因为c/c++在每个不同的系统中int short long 的长度是不同的，因此采用这种写法可以保证跨平台的争取性
+//因为c/c++在每个不同的系统中int short long 的长度是不同的
+//因此采用这种写法可以保证跨平台的争取性
 typedef uint8_t u1;
 typedef uint16_t u2;
 typedef uint32_t u4;

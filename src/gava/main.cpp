@@ -4,9 +4,9 @@
 
 void startJVM(Cmd &cmd){
     
-    JVM *jvm = new JVM(cmd);
-    jvm->init();
-    jvm->run();
+    JVM jvm(cmd);//创建一个虚拟机对象
+    jvm.init();//初始化
+    jvm.run();//开始运行
 }
 
 int main(int argc,char* argv[]){

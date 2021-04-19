@@ -4,7 +4,7 @@ u4 JVM::opcode_length[] = JVM_OPCODE_LENGTH_INITIALIZER; //每个指令的长度
 
 JVM::JVM(Cmd &cmd)
 {
-    this->main_class_name = cmd.getClassName();
+    main_class_name = cmd.getClassName();
     class_loader = new ClassLoader(cmd.getClassPath(), cmd.getXjrePath());
 }
 

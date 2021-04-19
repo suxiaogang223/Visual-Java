@@ -11,22 +11,22 @@ using namespace std;
 class ClassFile
 {
 private:
-    u4 magic;
-    u2 minor_version;
-    u2 major_version;
-    u2 constant_pool_count;//常量池个数
-    CpInfo *constant_pools;//常量池
-    u2 access_flags;//类的标识
-    u2 this_class;
-    u2 super_class;//父类
-    u2 interfaces_count;//接口个数
-    InterfacesInfo *interfaces;//接口信息
-    u2 fields_count;//域个数
-    FieldInfo *fields;//域信息
-    u2 methods_count;//方法个数
-    MethodInfo *methods;//方法信息
-    u2 attributes_count;
-    AttributeInfo *attributes;
+    u4 magic;//虚拟机的魔数 为十六进制数 cafe babe，一个菜蛋
+	u2 minor_version;//副版本号
+	u2 major_version;//主版本号
+	u2 constant_pool_count;//常量池的数量
+	CpInfo* constant_pools;//常量池
+	u2 access_flags;// 访问标志 如public peivate interface
+	u2 this_class;//类索引
+	u2 super_class;//父类索引
+	u2 interfaces_count;//接口计数器
+	InterfacesInfo* interfaces;//接口
+	u2 fields_count;//字段计数器
+	FieldInfo* fields;//字段
+	u2 methods_count;//方法计数器
+	MethodInfo* methods;//方法
+	u2 attributes_count;//属性表计数器
+	AttributeInfo* attributes;//属性表
 
 
     map<string, fieldType> static_fields;//存储static类型的filed

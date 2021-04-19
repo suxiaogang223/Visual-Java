@@ -10,17 +10,17 @@ ClassFile::ClassFile(string class_file_path)
 }
 
 void ClassFile::parseFile(){
-	magic = getU4();
-	minor_version = getU2();
-	major_version = getU2();
-	parseConstantPools();
-	access_flags = getU2();
-	this_class = getU2();
-	super_class = getU2();
-	parseInterfaces();
-	parseFields();
-	parseMethods();
-	parseAttributes();
+	magic = getU4();//获取魔数
+	minor_version = getU2();//获取副版本号
+	major_version = getU2();//获取主版本号
+	parseConstantPools();//解析常量表
+	access_flags = getU2();//获取访问标志
+	this_class = getU2();//获取类索引
+	super_class = getU2();//获取父类索引
+	parseInterfaces();//解析接口列表
+	parseFields();//解析字段列表
+	parseMethods();//解析方法列表
+	parseAttributes();//解析属性列表
 }
 
 void ClassFile::parseConstantPools() {
