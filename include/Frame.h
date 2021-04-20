@@ -1,5 +1,5 @@
 #pragma once
-#include"classfile/classfile.h"
+#include"classfile.h"
 #include"LocalVars.h"
 #include"OperandStack.h"
 #include"jvm_typedef.h"

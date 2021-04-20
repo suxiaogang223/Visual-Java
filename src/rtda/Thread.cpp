@@ -1,4 +1,4 @@
-#include"rtda/Thread.h"
+#include"Thread.h"
 #include"error_exit.h"
 
 Thread::Thread(u4 maxSize){
