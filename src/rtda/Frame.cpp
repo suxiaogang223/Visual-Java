@@ -1,11 +1,11 @@
-#include "Frame.h"
+#include"Frame.h"
 
-Frame::Frame(u2 maxLocals, u2 maxStack, u4 code_length, char *codes)
+Frame::Frame(Code_attribute *code)
 {
-    localVars = new LocalVars(maxLocals);
-    operandStack = new OperandStack(maxStack);
-    this->code_length = code_length;
-    this->codes = codes;
+    localVars = new LocalVars(code->max_locals);
+    operandStack = new OperandStack(code->max_stack);
+    this->code_length = code->code_length;
+    this->codes = code->codes;
     lower = NULL;
 }
 

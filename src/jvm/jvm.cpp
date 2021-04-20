@@ -16,7 +16,7 @@ void JVM::init()
     threads.push_back(main_thread);
     current_thread = main_thread;
     Code_attribute *main_method_code = main_class->getMethodByNameAndType("main", "([Ljava/lang/String;)V");
-    Frame *main_frame = new Frame(main_method_code->max_locals, main_method_code->max_stack, main_method_code->code_length, main_method_code->codes);
+    Frame *main_frame = new Frame(main_method_code);
     current_frame = main_frame;
     main_thread->pushFrame(main_frame);
 }

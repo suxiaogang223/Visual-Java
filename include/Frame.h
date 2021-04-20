@@ -15,7 +15,7 @@ private:
 
 public:
     Frame *lower;//链表
-    Frame(u2 maxLocals,u2 maxStack,u4 code_length,char* codes);
+    Frame(Code_attribute *code);
     u1 get_code(u4 pc);
     u1 get_u1(u4 pc);
     u2 get_u2(u4 pc);
