@@ -12,16 +12,21 @@ private:
     OperandStack *operandStack;
     u4 code_length;
     char* codes;
+    ClassFile *classfile;
 
 public:
     Frame *lower;//链表
-    Frame(Code_attribute *code);
+    Frame(ClassFile *classfile,Code_attribute *code);
+    ClassFile* getClassFile();
+
     u1 get_code(u4 pc);
     u1 get_u1(u4 pc);
     u2 get_u2(u4 pc);
     u4 get_u4(u4 pc);
 
     //对操作数栈的一系列操作
+    void push_byte32(byte_32 a);
+    void push_byte64(byte_64 a);
     void push_jint(jint a);
     void push_jbyte(jbyte a);
     void push_jboolean(jboolean a);

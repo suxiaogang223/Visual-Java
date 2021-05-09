@@ -56,6 +56,8 @@ public:
 	Code_attribute* getMethodByNameAndType(string name,string type);
 	fieldType getField(string name);
 	void setField(string name, fieldType value);
+	byte_32 getConstantByte32(u2 index);
+	byte_64 getConstantByte64(u2 index);
 	void printClassFile();
 	~ClassFile();
 };

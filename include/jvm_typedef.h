@@ -46,6 +46,12 @@ typedef int32_t jint;
 typedef int64_t jlong;
 typedef float jfloat;
 typedef double jdouble;
+
+class object{
+
+};
+
+typedef object* jobject;
 //todo more
 
 
@@ -58,11 +64,12 @@ union byte_32{
     jshort _jshort;
     jint _jint;
     jfloat _jfloat;
+    jobject _jobject;
 };
 
 union byte_64{
     u4 _u4[2];
-    byte_32 _byte_32[2];//不一定有用
+    //byte_32 _byte_32[2];
     jlong _jlong;
     jdouble _jdouble;
 };

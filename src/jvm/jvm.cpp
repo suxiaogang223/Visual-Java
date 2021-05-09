@@ -16,7 +16,7 @@ void JVM::init()
     threads.push_back(main_thread);
     current_thread = main_thread;
     Code_attribute *main_method_code = main_class->getMethodByNameAndType("main", "([Ljava/lang/String;)V");
-    Frame *main_frame = new Frame(main_method_code);
+    Frame *main_frame = new Frame(main_class,main_method_code);
     current_frame = main_frame;
     main_thread->pushFrame(main_frame);
 }
@@ -132,10 +132,28 @@ void JVM::interprete(u1 code) //这个函数可以说是虚拟机中最重要的
     }
 
     case ldc: //将int,float或String型常量值从常量池中推送至栈顶
+    {
+        u1 index = current_frame->get_u1(current_thread->getPC());
+        byte_32 a = current_frame->getClassFile()->getConstantByte32((u2)index);
+        current_frame->push_byte32(a);
+        break;
+    }
 
     case ldc_w: //将int,float或String型常量值从常量池中推送至栈顶（宽索引）
+    {
+        u2 index = current_frame->get_u1(current_thread->getPC());
+        byte_32 a = current_frame->getClassFile()->getConstantByte32(index);
+        current_frame->push_byte32(a);
+        break;
+    }
 
     case ldc2_w: //将long或double型常量值从常量池中推送至栈顶（宽索引）
+    {
+        u2 index = current_frame->get_u1(current_thread->getPC());
+        byte_64 a = current_frame->getClassFile()->getConstantByte64(index);
+        current_frame->push_byte64(a);
+        break;
+    }
 
     case iload: //将指定的int型本地变量
     {

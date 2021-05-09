@@ -1,12 +1,18 @@
-#include"Frame.h"
+#include "Frame.h"
 
-Frame::Frame(Code_attribute *code)
+Frame::Frame(ClassFile *classfile, Code_attribute *code)
 {
+    this->classfile = classfile;
     localVars = new LocalVars(code->max_locals);
     operandStack = new OperandStack(code->max_stack);
     this->code_length = code->code_length;
     this->codes = code->codes;
     lower = NULL;
+}
+
+ClassFile *Frame::getClassFile()
+{
+    return classfile;
 }
 
 u1 Frame::get_code(u4 pc)
@@ -48,6 +54,16 @@ u4 Frame::get_u4(u4 pc)
     return a._u4;
 }
 
+void Frame::push_byte32(byte_32 a)
+{
+    operandStack->push(a._u4);
+}
+
+void Frame::push_byte64(byte_64 a)
+{
+    operandStack->push(a._u4[0]);
+    operandStack->push(a._u4[1]);
+}
 
 void Frame::push_jbyte(jbyte a)
 {
@@ -137,7 +153,6 @@ void Frame::dup_x2()
     operandStack->push(a);
     operandStack->push(a);
     operandStack->push(a);
-
 }
 
 void Frame::dup2()
@@ -162,7 +177,6 @@ void Frame::dup2_x1()
     operandStack->push(a);
     operandStack->push(b);
     operandStack->push(a);
-
 }
 
 void Frame::dup2_x2()
