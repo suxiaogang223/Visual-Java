@@ -184,6 +184,11 @@ void JVM::interprete(u1 code) //这个函数可以说是虚拟机中最重要的
     }
 
     case aload: //将指定的引用类型本地变量
+    {
+        jobject a = current_frame->load_jobject(current_frame->get_u1(current_thread->getPC()));
+        current_frame->push_jobject(a);
+        break;
+    }
 
     case iload_0: //将第一个int型本地变量
     {
@@ -298,12 +303,32 @@ void JVM::interprete(u1 code) //这个函数可以说是虚拟机中最重要的
     }
 
     case aload_0: //将第一个引用类型本地变量
+    {
+        jobject a = current_frame->load_jobject(0);
+        current_frame->push_jobject(a);
+        break;
+    }
 
     case aload_1: //将第二个引用类型本地变量
+    {
+        jobject a = current_frame->load_jobject(1);
+        current_frame->push_jobject(a);
+        break;
+    }
 
     case aload_2: //将第三个引用类型本地变量
+    {
+        jobject a = current_frame->load_jobject(2);
+        current_frame->push_jobject(a);
+        break;
+    }
 
     case aload_3: //将第四个引用类型本地变量
+    {
+        jobject a = current_frame->load_jobject(3);
+        current_frame->push_jobject(a);
+        break;
+    }
 
     case iaload: //将int型数组指定索引的值推送至栈顶
 
@@ -350,6 +375,11 @@ void JVM::interprete(u1 code) //这个函数可以说是虚拟机中最重要的
     }
 
     case astore: //将栈顶引用型数值存入指定本地变量
+    {
+        jobject a = current_frame->pop_jobject();
+        current_frame->store_jobject(current_frame->get_u1(current_thread->getPC()), a);
+        break;
+    }
 
     case istore_0: //将栈顶int型数值存入第一个本地变量
     {
@@ -448,12 +478,28 @@ void JVM::interprete(u1 code) //这个函数可以说是虚拟机中最重要的
     }
 
     case astore_0: //将栈顶引用型数值存入第一个本地变量
+    {
+        current_frame->store_jobject(0,current_frame->pop_jobject());
+        break;
+    }
 
     case astore_1: //将栈顶引用型数值存入第二个本地变量
+    {
+        current_frame->store_jobject(1,current_frame->pop_jobject());
+        break;
+    }
 
     case astore_2: //将栈顶引用型数值存入第三个本地变量
+    {
+        current_frame->store_jobject(2,current_frame->pop_jobject());
+        break;
+    }
 
     case astore_3: //将栈顶引用型数值存入第四个本地变量
+    {
+        current_frame->store_jobject(3,current_frame->pop_jobject());
+        break;
+    }
 
     case iastore: //将栈顶int型数值存入指定数组的指定索引位置
 

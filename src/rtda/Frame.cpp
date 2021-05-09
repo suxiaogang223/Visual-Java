@@ -122,6 +122,12 @@ void Frame::push_jdouble(jdouble a)
     operandStack->push(byte64._u4[0]);
     operandStack->push(byte64._u4[1]);
 }
+void Frame::push_jobject(jobject a)
+{
+    byte_32 byte_32;
+    byte_32._jobject = a;
+    operandStack->push(byte_32._u4);
+}
 
 void Frame::pop()
 {
@@ -265,6 +271,13 @@ jdouble Frame::pop_jdouble()
     operandStack->pop();
     return byte64._jdouble;
 }
+jobject Frame::pop_jobject()
+{
+    byte_32 byte_32;
+    byte_32._u4 = operandStack->getTop();
+    operandStack->pop();
+    return byte_32._jobject;
+}
 
 jint Frame::load_jint(u2 shift)
 {
@@ -318,6 +331,12 @@ jdouble Frame::load_jdouble(u2 shift)
     byte64._u4[1] = localVars->load(shift + 1);
     return byte64._jdouble;
 }
+jobject Frame::load_jobject(u2 shift)
+{
+    byte_32 byte32;
+    byte32._u4 = localVars->load(shift);
+    return byte32._jobject;
+}
 
 void Frame::store_jint(u2 shift, jint a)
 {
@@ -368,6 +387,12 @@ void Frame::store_jdouble(u2 shift, jdouble a)
     byte64._jdouble = a;
     localVars->store(shift, byte64._u4[0]);
     localVars->store(shift + 1, byte64._u4[1]);
+}
+void Frame::store_jobject(u2 shift,jobject a)
+{
+    byte_32 byte_32;
+    byte_32._jobject = a;
+    localVars->store(shift,byte_32._u4);
 }
 
 Frame::~Frame()

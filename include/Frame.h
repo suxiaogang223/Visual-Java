@@ -35,6 +35,7 @@ public:
     void push_jlong(jlong a);
     void push_jfloat(jfloat a);
     void push_jdouble(jdouble a);
+    void push_jobject(jobject a);
 
     void pop();
     void pop2();
@@ -54,6 +55,7 @@ public:
     jlong pop_jlong();
     jfloat pop_jfloat();
     jdouble pop_jdouble();
+    jobject pop_jobject();
 
     //对本地变量表的一些操作
     jint load_jint(u2 shift);
@@ -64,6 +66,7 @@ public:
     jfloat load_jfloat(u2 shift);
     jlong load_jlong(u2 shift);
     jdouble load_jdouble(u2 shift);
+    jobject load_jobject(u2 shift);
 
     void store_jint(u2 shift,jint a);
     void store_jbyte(u2 shift, jbyte a);
@@ -73,6 +76,7 @@ public:
     void store_jfloat(u2 shift,jfloat a);
     void store_jlong(u2 shift,jlong a);
     void store_jdouble(u2 shift,jdouble a);
+    void store_jobject(u2 shift,jobject a);
 
     ~Frame();
 };
