@@ -11,7 +11,7 @@ Frame::Frame(ClassFile *classfile, std::string class_name, std::string method_na
     operandStack = new OperandStack(code->max_stack);
     this->code_length = code->code_length;
     this->codes = code->codes;
-    lower = NULL;
+    // lower = NULL;
 }
 
 ClassFile *Frame::getClassFile()
