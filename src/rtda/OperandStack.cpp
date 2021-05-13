@@ -9,8 +9,8 @@ OperandStack::OperandStack(u2 maxStack){
 
 void OperandStack::printOperandStack(){
     std::cout<<"op_stack_length:"<<index<<std::endl;
-    for(u4 i = index-1;i>=0;i--)
-        std::cout<<stack[i]<<std::endl;
+    for(u2 i = index;i>0;i--)//i设为u4会导致index为0时发生错误
+        std::cout<<stack[i-1]<<std::endl;
 }
 
 void OperandStack::push(u4 operand){

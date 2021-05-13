@@ -25,10 +25,12 @@ void Frame::printFrame()
     std::cout << "method_name: " << method_name << std::endl;
     std::cout << "method_descriptor: " << method_descriptor << std::endl;
     std::cout << "code_length:" << code_length << std::endl;
-    std::cout << std::hex; //打印16进制数
-    for (u4 i = 0; i < code_length; i++)
-        std::cout << codes[i] << std::endl;
-    std::cout<<std::dec;
+    // std::cout << std::hex; //打印16进制数
+    // for (u4 i = 0; i < code_length; i++)
+    //     std::cout << codes[i] << std::endl;
+    // std::cout << std::dec;
+    for(u4 i = 0;i<code_length;i++)
+        printf("%02hhx\n",codes[i]);
     operandStack->printOperandStack();
     localVars->printLocalVars();
 }

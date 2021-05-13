@@ -1,13 +1,14 @@
 #pragma once
-#include "Stack.h"
+// #include "Stack.h"
 #include<stack>
+#include "Frame.h"
 
 
 class Thread
 {
 private:
     u4 pc;
-    Stack *stack;
+    std::stack<Frame*> *vmStack;
 
 public:
     Thread(u4 maxSize);

@@ -3,7 +3,7 @@
 #include "LocalVars.h"
 #include "OperandStack.h"
 #include "jvm_typedef.h"
-
+#include <cstdio>
 class Frame
 {
 private:
@@ -19,7 +19,7 @@ private:
     std::string class_name;
 
 public:
-    Frame *lower; //链表
+    // Frame *lower; //链表
     Frame(ClassFile *classfile, std::string class_name, std::string method_name, std::string method_descriptor);
     ClassFile *getClassFile();
     void printFrame();

@@ -6,7 +6,7 @@ LocalVars::LocalVars(u2 maxLocal){
 }
 
 void LocalVars::printLocalVars(){
-    std::cout<<"local_vars_length:"<<maxLocal;
+    std::cout<<"local_vars_length:"<<maxLocal<<std::endl;
     for(int i = 0;i<maxLocal;i++)
         std::cout<<localvars[i]<<std::endl;
 }
