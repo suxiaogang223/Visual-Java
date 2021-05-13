@@ -1,8 +1,12 @@
 #include "Frame.h"
 
-Frame::Frame(ClassFile *classfile, Code_attribute *code)
+Frame::Frame(ClassFile *classfile, std::string class_name, std::string method_name, std::string method_descriptor)
 {
     this->classfile = classfile;
+    this->class_name = class_name;
+    this->method_name = method_name;
+    this->method_descriptor = method_descriptor;
+    Code_attribute *code = classfile->getMethodByNameAndType(method_name, method_descriptor);
     localVars = new LocalVars(code->max_locals);
     operandStack = new OperandStack(code->max_stack);
     this->code_length = code->code_length;
@@ -13,6 +17,20 @@ Frame::Frame(ClassFile *classfile, Code_attribute *code)
 ClassFile *Frame::getClassFile()
 {
     return classfile;
+}
+
+void Frame::printFrame()
+{
+    std::cout << "class_name: " << class_name << std::endl;
+    std::cout << "method_name: " << method_name << std::endl;
+    std::cout << "method_descriptor: " << method_descriptor << std::endl;
+    std::cout << "code_length:" << code_length << std::endl;
+    std::cout << std::hex; //打印16进制数
+    for (u4 i = 0; i < code_length; i++)
+        std::cout << codes[i] << std::endl;
+    std::cout<<std::dec;
+    operandStack->printOperandStack();
+    localVars->printLocalVars();
 }
 
 u1 Frame::get_code(u4 pc)
@@ -388,11 +406,11 @@ void Frame::store_jdouble(u2 shift, jdouble a)
     localVars->store(shift, byte64._u4[0]);
     localVars->store(shift + 1, byte64._u4[1]);
 }
-void Frame::store_jobject(u2 shift,jobject a)
+void Frame::store_jobject(u2 shift, jobject a)
 {
     byte_32 byte_32;
     byte_32._jobject = a;
-    localVars->store(shift,byte_32._u4);
+    localVars->store(shift, byte_32._u4);
 }
 
 Frame::~Frame()

@@ -1,9 +1,8 @@
 #pragma once
-#include"classfile.h"
-#include"LocalVars.h"
-#include"OperandStack.h"
-#include"jvm_typedef.h"
-
+#include "classfile.h"
+#include "LocalVars.h"
+#include "OperandStack.h"
+#include "jvm_typedef.h"
 
 class Frame
 {
@@ -11,13 +10,19 @@ private:
     LocalVars *localVars;
     OperandStack *operandStack;
     u4 code_length;
-    char* codes;
+    char *codes;
     ClassFile *classfile;
 
+    //这些成员在打印时很有帮助
+    std::string method_name;
+    std::string method_descriptor;
+    std::string class_name;
+
 public:
-    Frame *lower;//链表
-    Frame(ClassFile *classfile,Code_attribute *code);
-    ClassFile* getClassFile();
+    Frame *lower; //链表
+    Frame(ClassFile *classfile, std::string class_name, std::string method_name, std::string method_descriptor);
+    ClassFile *getClassFile();
+    void printFrame();
 
     u1 get_code(u4 pc);
     u1 get_u1(u4 pc);
@@ -39,10 +44,10 @@ public:
 
     void pop();
     void pop2();
-    void dup();//复制栈顶数值并将两个复制值压入栈顶（不能是long和double）
+    void dup(); //复制栈顶数值并将两个复制值压入栈顶（不能是long和double）
     void dup_x1();
     void dup_x2();
-    void dup2();//复制栈顶数值（long,doubel)并将两个复制值压入栈顶
+    void dup2(); //复制栈顶数值（long,doubel)并将两个复制值压入栈顶
     void dup2_x1();
     void dup2_x2();
     void swap();
@@ -68,15 +73,15 @@ public:
     jdouble load_jdouble(u2 shift);
     jobject load_jobject(u2 shift);
 
-    void store_jint(u2 shift,jint a);
+    void store_jint(u2 shift, jint a);
     void store_jbyte(u2 shift, jbyte a);
-    void store_jboolean(u2 shift,jboolean a);
-    void store_jchar(u2 shift,jchar a);
-    void store_jshort(u2 shift,jshort a);
-    void store_jfloat(u2 shift,jfloat a);
-    void store_jlong(u2 shift,jlong a);
-    void store_jdouble(u2 shift,jdouble a);
-    void store_jobject(u2 shift,jobject a);
+    void store_jboolean(u2 shift, jboolean a);
+    void store_jchar(u2 shift, jchar a);
+    void store_jshort(u2 shift, jshort a);
+    void store_jfloat(u2 shift, jfloat a);
+    void store_jlong(u2 shift, jlong a);
+    void store_jdouble(u2 shift, jdouble a);
+    void store_jobject(u2 shift, jobject a);
 
     ~Frame();
 };

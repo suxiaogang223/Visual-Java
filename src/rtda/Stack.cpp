@@ -1,37 +1,51 @@
-#include"Stack.h"
-#include"error_exit.h"
+#include "Stack.h"
+#include "error_exit.h"
 
-Stack::Stack(u4 maxSize){
+Stack::Stack(u4 maxSize)
+{
     this->maxSize = maxSize;
     _top = NULL;
     size = 0;
 }
 
-void Stack::push(Frame *frame){
-    if(size>=maxSize)
+void Stack::push(Frame *frame)
+{
+    if (size >= maxSize)
         exit_with_massage("VMStack overflow");
     // if(_top!=NULL)
     frame->lower = _top;
     _top = frame;
     size++;
-    
 }
 
-void Stack::pop(){
-    if(_top==NULL)
+void Stack::pop()
+{
+    if (_top == NULL)
         exit_with_massage("VMStack is empty");
-    Frame* lower = _top->lower;
-    free(_top);//释放内存
+    Frame *lower = _top->lower;
+    free(_top); //释放内存
     _top = lower;
     size--;
 }
 
-Frame* Stack::top(){
-    if(_top==NULL)
+Frame *Stack::top()
+{
+    if (_top == NULL)
         exit_with_massage("VMStack is empty");
     return _top;
 }
 
-Stack::~Stack(){
+u4 Stack::get_size()
+{
+    return size;
+}
+
+bool Stack::empty()
+{
+    return _top == NULL;
+}
+
+Stack::~Stack()
+{
     //TODO
 }

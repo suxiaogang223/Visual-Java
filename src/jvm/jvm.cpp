@@ -11,24 +11,54 @@ JVM::JVM(Cmd &cmd)
 void JVM::init()
 {
     ClassFile *main_class = class_loader->load(main_class_name);
-    classfiles.insert(pair<string, ClassFile *>(main_class_name, main_class));
+    classfiles.insert(std::pair<std::string, ClassFile *>(main_class_name, main_class));
     Thread *main_thread = new Thread(1024); //虚拟机栈最大暂时设置为1024
     threads.push_back(main_thread);
     current_thread = main_thread;
-    Code_attribute *main_method_code = main_class->getMethodByNameAndType("main", "([Ljava/lang/String;)V");
-    Frame *main_frame = new Frame(main_class,main_method_code);
+    Frame *main_frame = new Frame(main_class, main_class_name, "main", "([Ljava/lang/String;)V");
     current_frame = main_frame;
     main_thread->pushFrame(main_frame);
+    std::cout << "jvm inited success" << std::endl;
+    printJVM();
+}
+
+void JVM::printJVM()
+{
+    std::cout << "JVM info:"<<printCount << std::endl;
+    printfClassFiles();
+    printThreads();
+}
+
+void JVM::printfClassFiles()
+{
+    std::cout << "ClassFiles:" << std::endl;
+    std::cout << "classfiles_count:" << classfiles.size() << std::endl;
+    for (auto iter = classfiles.begin(); iter != classfiles.end(); iter++)
+    {
+        std::cout << iter->first << std::endl;
+        iter->second->printClassFile();
+    }
+}
+
+void JVM::printThreads()
+{
+    std::cout << "Threads:" << std::endl;
+    std::cout << "threads_count:" << threads.size() << std::endl;
+    for (int i = 0; i < threads.size(); i++)
+    {
+        std::cout << "thread_" << i << std::endl;
+        threads.at(i)->printThread();
+    }
 }
 
 void JVM::run()
 {
-    string commend;
-    while (cin >> commend)
+    std::string commend;
+    while (std::cin >> commend)
     {
         if (!current_frame)
         {
-            cout << "JVM Over" << endl; //程序执行完毕
+            std::cout << "JVM Over" << std::endl; //程序执行完毕
             break;
         }
         else if (commend == "next")
@@ -38,15 +68,16 @@ void JVM::run()
             interprete(code);                          //解析指令
             pc += opcode_length[code];
             current_thread->setPC(pc); //设置pc
+            printJVM();                //打印信息
         }
         else if (commend == "end")
         {
-            cout << "JVM End" << endl;
+            std::cout << "JVM End" << std::endl;
             break;
         }
         else
         {
-            cout << "Unknow Commend" << endl;
+            std::cout << "Unknow Commend" << std::endl;
         }
     }
 }
@@ -479,30 +510,30 @@ void JVM::interprete(u1 code) //这个函数可以说是虚拟机中最重要的
 
     case astore_0: //将栈顶引用型数值存入第一个本地变量
     {
-        current_frame->store_jobject(0,current_frame->pop_jobject());
+        current_frame->store_jobject(0, current_frame->pop_jobject());
         break;
     }
 
     case astore_1: //将栈顶引用型数值存入第二个本地变量
     {
-        current_frame->store_jobject(1,current_frame->pop_jobject());
+        current_frame->store_jobject(1, current_frame->pop_jobject());
         break;
     }
 
     case astore_2: //将栈顶引用型数值存入第三个本地变量
     {
-        current_frame->store_jobject(2,current_frame->pop_jobject());
+        current_frame->store_jobject(2, current_frame->pop_jobject());
         break;
     }
 
     case astore_3: //将栈顶引用型数值存入第四个本地变量
     {
-        current_frame->store_jobject(3,current_frame->pop_jobject());
+        current_frame->store_jobject(3, current_frame->pop_jobject());
         break;
     }
 
     case iastore: //将栈顶int型数值存入指定数组的指定索引位置
-
+    //todo
     case lastore: //将栈顶long型数值存入指定数组的指定索引位置
 
     case fastore: //将栈顶float型数值存入指定数组的指定索引位置
@@ -991,20 +1022,46 @@ void JVM::interprete(u1 code) //这个函数可以说是虚拟机中最重要的
     }
 
     case if_acmpeq: //比较栈顶两引用型数值，当结果相等时跳转
+    {
+        jobject b = current_frame->pop_jobject();
+        jobject a = current_frame->pop_jobject();
+        if (a - b == 0)
+            current_thread->setPC(current_frame->get_u2(current_thread->getPC()) - opcode_length[code]);
+        break;
+    }
 
     case if_acmpne: //比较栈顶两引用型数值，当结果不相等时跳转
+    {
+        jobject b = current_frame->pop_jobject();
+        jobject a = current_frame->pop_jobject();
+        if (a - b != 0)
+            current_thread->setPC(current_frame->get_u2(current_thread->getPC()) - opcode_length[code]);
+        break;
+    }
 
     case goto_: //无条件跳转
         current_thread->setPC(current_frame->get_u2(current_thread->getPC()) - opcode_length[code]);
         break;
 
     case jsr: //跳转至指定16位offset位置，并将jsr下一条指令地址压入栈顶
+    {
+        //todo 指令已废除
+        exit_with_massage("jsr 已经不用了");
+        break;
+    }
 
     case ret: //返回至本地变量
+    {
+        //todo 指令已废除
+        exit_with_massage("ret 已经不用了");
+        break;
+    }
 
     case tableswitch: //用于switch条件跳转，case值连续（可变长度指令）
+        //todo
 
     case lookupswitch: //用于switch条件跳转，case值不连续（可变长度指令）
+        //todo
 
     case ireturn: //从当前方法返回int
 

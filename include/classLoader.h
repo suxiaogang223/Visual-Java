@@ -3,9 +3,9 @@
 
 class ClassLoader{
 private:
-    string classpath;
-    string Xjrepath;
+    std::string classpath;
+    std::string Xjrepath;
 public:
-    ClassLoader(string classpath,string Xjrepath);
-    ClassFile* load(string className);
+    ClassLoader(std::string classpath,std::string Xjrepath);
+    ClassFile* load(std::string className);
 };

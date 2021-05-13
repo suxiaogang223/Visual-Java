@@ -10,6 +10,7 @@ private:
 
 public:
     LocalVars(u2 maxLocal);
+    void printLocalVars();
     void store(u2 index,u4 localvar);
     u4 load(u2 index);
     ~LocalVars();

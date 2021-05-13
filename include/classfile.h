@@ -6,7 +6,7 @@
 #include "classfile_typedef.h"
 #include "classfile_constants.h"
 #include "error_exit.h"
-using namespace std;
+//using namespace std;
 
 class ClassFile
 {
@@ -29,7 +29,7 @@ private:
 	AttributeInfo* attributes;//属性表
 
 
-    map<string, fieldType> static_fields;//存储static类型的filed
+    std::map<std::string, fieldType> static_fields;//存储static类型的filed
 	void init_static_fields();//static变量在类加载的时候初始化
 	std::fstream f;
 	u1 getU1();//按字节读取
@@ -52,10 +52,10 @@ private:
 	void printMethods();
 
 public:
-	ClassFile(string class_file_path);
-	Code_attribute* getMethodByNameAndType(string name,string type);
-	fieldType getField(string name);
-	void setField(string name, fieldType value);
+	ClassFile(std::string class_file_path);
+	Code_attribute* getMethodByNameAndType(std::string name,std::string type);
+	fieldType getField(std::string name);
+	void setField(std::string name, fieldType value);
 	byte_32 getConstantByte32(u2 index);
 	byte_64 getConstantByte64(u2 index);
 	void printClassFile();

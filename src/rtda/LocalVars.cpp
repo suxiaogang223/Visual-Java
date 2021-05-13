@@ -5,6 +5,12 @@ LocalVars::LocalVars(u2 maxLocal){
     localvars = new u4[maxLocal]();//new的同时初始化
 }
 
+void LocalVars::printLocalVars(){
+    std::cout<<"local_vars_length:"<<maxLocal;
+    for(int i = 0;i<maxLocal;i++)
+        std::cout<<localvars[i]<<std::endl;
+}
+
 void LocalVars::store(u2 index,u4 localvar){
     if(index>=maxLocal||index<0)
         exit_with_massage("lcoalVars overstep : "+index);

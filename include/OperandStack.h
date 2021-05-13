@@ -10,6 +10,7 @@ private:
     u2 index; //当前指针
 public:
     OperandStack(u2 maxStack);
+    void printOperandStack();
     void push(u4 operand);
     void pop();
     u4 getTop();

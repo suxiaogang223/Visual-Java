@@ -1,5 +1,6 @@
 #pragma once
 #include "Stack.h"
+#include<stack>
 
 
 class Thread
@@ -15,5 +16,6 @@ public:
     void pushFrame(Frame *frame);
     void popFrame();
     Frame* currentFrame();
+    void printThread();
     ~Thread();
 };
