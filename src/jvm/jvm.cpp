@@ -25,6 +25,7 @@ void JVM::init()
 void JVM::printJVM()
 {
     std::cout << "JVM info:"<<printCount << std::endl;
+    printCount++;
     printfClassFiles();
     printThreads();
 }
