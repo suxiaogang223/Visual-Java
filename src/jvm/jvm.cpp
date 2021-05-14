@@ -1,6 +1,6 @@
 #include "jvm.h"
 
-u4 JVM::opcode_length[] = JVM_OPCODE_LENGTH_INITIALIZER; //每个指令的长度
+static u4 opcode_length[] = JVM_OPCODE_LENGTH_INITIALIZER; //每个指令的长度
 
 JVM::JVM(Cmd &cmd)
 {
@@ -24,7 +24,7 @@ void JVM::init()
 
 void JVM::printJVM()
 {
-    std::cout << "------------JVM info------------:"<<printCount << std::endl;
+    std::cout << "------------JVM info------------:" << printCount << std::endl;
     printCount++;
     printfClassFiles();
     printThreads();
@@ -54,34 +54,47 @@ void JVM::printThreads()
 
 void JVM::run()
 {
-    std::string commend;
-    while (std::cin >> commend)
+    while (true)
     {
-        if (!current_frame)
-        {
-            std::cout << "JVM Over" << std::endl; //程序执行完毕
-            break;
-        }
-        else if (commend == "next")
-        {
-            u4 pc = current_thread->getPC();
-            u1 code = (u1)current_frame->get_code(pc); //获取指令
-            interprete(code);                          //解析指令
-            pc += opcode_length[code];
-            current_thread->setPC(pc); //设置pc
-            printJVM();                //打印信息
-        }
-        else if (commend == "end")
-        {
-            std::cout << "JVM End" << std::endl;
-            break;
-        }
-        else
-        {
-            std::cout << "Unknow Commend" << std::endl;
-        }
+        u4 pc = current_thread->getPC();
+        u1 code = (u1)current_frame->get_code(pc); //获取指令
+        interprete(code);                          //解析指令
+        current_thread->setPC(current_thread->getPC()+opcode_length[code]); //设置pc
+        printJVM();                //打印信息
     }
 }
+
+// void JVM::run()
+// {
+//     std::string commend = "next";
+//     while (std::cin >> commend)
+//     while(true)
+//     {
+//         if (!current_frame)
+//         {
+//             std::cout << "JVM Over" << std::endl; //程序执行完毕
+//             break;
+//         }
+//         else if (commend == "next")
+//         {
+//             u4 pc = current_thread->getPC();
+//             u1 code = (u1)current_frame->get_code(pc); //获取指令
+//             interprete(code);                          //解析指令
+//             pc += opcode_length[code];
+//             current_thread->setPC(pc); //设置pc
+//             printJVM();                //打印信息
+//         }
+//         else if (commend == "end")
+//         {
+//             std::cout << "JVM End" << std::endl;
+//             break;
+//         }
+//         else
+//         {
+//             std::cout << "Unknow Commend" << std::endl;
+//         }
+//     }
+// }
 
 void JVM::interprete(u1 code) //这个函数可以说是虚拟机中最重要的函数，他很长，但是我还没有找到足够优雅的方式进行重构:(
 {
@@ -173,7 +186,7 @@ void JVM::interprete(u1 code) //这个函数可以说是虚拟机中最重要的
 
     case ldc_w: //将int,float或String型常量值从常量池中推送至栈顶（宽索引）
     {
-        u2 index = current_frame->get_u1(current_thread->getPC());
+        u2 index = current_frame->get_u2(current_thread->getPC());
         byte_32 a = current_frame->getClassFile()->getConstantByte32(index);
         current_frame->push_byte32(a);
         break;
@@ -181,7 +194,7 @@ void JVM::interprete(u1 code) //这个函数可以说是虚拟机中最重要的
 
     case ldc2_w: //将long或double型常量值从常量池中推送至栈顶（宽索引）
     {
-        u2 index = current_frame->get_u1(current_thread->getPC());
+        u2 index = current_frame->get_u2(current_thread->getPC());
         byte_64 a = current_frame->getClassFile()->getConstantByte64(index);
         current_frame->push_byte64(a);
         break;
@@ -493,19 +506,19 @@ void JVM::interprete(u1 code) //这个函数可以说是虚拟机中最重要的
 
     case dstore_1: //将栈顶double型数值存入第二个本地变量
     {
-        current_frame->store_jfloat(1, current_frame->pop_jfloat());
+        current_frame->store_jdouble(1, current_frame->pop_jdouble());
         break;
     }
 
     case dstore_2: //将栈顶double型数值存入第三个本地变量
     {
-        current_frame->store_jfloat(2, current_frame->pop_jfloat());
+        current_frame->store_jdouble(2, current_frame->pop_jdouble());
         break;
     }
 
     case dstore_3: //将栈顶double型数值存入第四个本地变量
     {
-        current_frame->store_jfloat(3, current_frame->pop_jfloat());
+        current_frame->store_jdouble(3, current_frame->pop_jdouble());
         break;
     }
 
@@ -803,8 +816,8 @@ void JVM::interprete(u1 code) //这个函数可以说是虚拟机中最重要的
 
     case iinc: //将指定int型变量增加指定值（i++,i–,i+=2）
     {
-        jbyte inc = current_frame->get_u1(current_thread->getPC());
-        u1 index = current_frame->get_u1(current_thread->getPC() + 1);
+        u1 index = current_frame->get_u1(current_thread->getPC());
+        jbyte inc = current_frame->get_u1(current_thread->getPC() + 1);
         current_frame->store_jint(index, current_frame->load_jint(index) + inc);
         break;
     }
@@ -940,32 +953,32 @@ void JVM::interprete(u1 code) //这个函数可以说是虚拟机中最重要的
 
     case ifeq: //当栈顶int型数值等于0时跳转
         if (current_frame->pop_jint() == 0)
-            current_thread->setPC(current_frame->get_u2(current_thread->getPC()) - opcode_length[code]); //TODO当减法结果为负数时会不会出现错误？
+            current_thread->setPC(current_thread->getPC()+(short)current_frame->get_u2(current_thread->getPC()) - opcode_length[code]); //TODO当减法结果为负数时会不会出现错误？
         break;
 
     case ifne: //当栈顶int型数值不等于0时跳转
         if (current_frame->pop_jint() != 0)
-            current_thread->setPC(current_frame->get_u2(current_thread->getPC()) - opcode_length[code]); //TODO当减法结果为负数时会不会出现错误？
+            current_thread->setPC(current_thread->getPC()+(short)current_frame->get_u2(current_thread->getPC()) - opcode_length[code]); //TODO当减法结果为负数时会不会出现错误？
         break;
 
     case iflt: //当栈顶int型数值小于0时跳转
         if (current_frame->pop_jint() < 0)
-            current_thread->setPC(current_frame->get_u2(current_thread->getPC()) - opcode_length[code]); //TODO当减法结果为负数时会不会出现错误？
+            current_thread->setPC(current_thread->getPC()+(short)current_frame->get_u2(current_thread->getPC()) - opcode_length[code]); //TODO当减法结果为负数时会不会出现错误？
         break;
 
     case ifge: //当栈顶int型数值大于等于0时跳转
         if (current_frame->pop_jint() >= 0)
-            current_thread->setPC(current_frame->get_u2(current_thread->getPC()) - opcode_length[code]); //TODO当减法结果为负数时会不会出现错误？
+            current_thread->setPC(current_thread->getPC()+(short)current_frame->get_u2(current_thread->getPC()) - opcode_length[code]); //TODO当减法结果为负数时会不会出现错误？
         break;
 
     case ifgt: //当栈顶int型数值大于0时跳转
         if (current_frame->pop_jint() > 0)
-            current_thread->setPC(current_frame->get_u2(current_thread->getPC()) - opcode_length[code]); //TODO当减法结果为负数时会不会出现错误？
+            current_thread->setPC(current_thread->getPC()+(short)current_frame->get_u2(current_thread->getPC()) - opcode_length[code]); //TODO当减法结果为负数时会不会出现错误？
         break;
 
     case ifle: //当栈顶int型数值小于等于0时跳转
         if (current_frame->pop_jint() <= 0)
-            current_thread->setPC(current_frame->get_u2(current_thread->getPC()) - opcode_length[code]); //TODO当减法结果为负数时会不会出现错误？
+            current_thread->setPC(current_thread->getPC()+(short)current_frame->get_u2(current_thread->getPC()) - opcode_length[code]); //TODO当减法结果为负数时会不会出现错误？
         break;
 
     case if_icmpeq: //比较栈顶两int型数值大小，当结果等于0时跳转
@@ -973,7 +986,7 @@ void JVM::interprete(u1 code) //这个函数可以说是虚拟机中最重要的
         jint b = current_frame->pop_jint();
         jint a = current_frame->pop_jint();
         if (a - b == 0)
-            current_thread->setPC(current_frame->get_u2(current_thread->getPC()) - opcode_length[code]);
+            current_thread->setPC(current_thread->getPC()+(short)current_frame->get_u2(current_thread->getPC()) - opcode_length[code]);
         break;
     }
 
@@ -982,7 +995,7 @@ void JVM::interprete(u1 code) //这个函数可以说是虚拟机中最重要的
         jint b = current_frame->pop_jint();
         jint a = current_frame->pop_jint();
         if (a - b != 0)
-            current_thread->setPC(current_frame->get_u2(current_thread->getPC()) - opcode_length[code]);
+            current_thread->setPC(current_thread->getPC()+(short)current_frame->get_u2(current_thread->getPC()) - opcode_length[code]);
         break;
     }
 
@@ -991,7 +1004,7 @@ void JVM::interprete(u1 code) //这个函数可以说是虚拟机中最重要的
         jint b = current_frame->pop_jint();
         jint a = current_frame->pop_jint();
         if (a - b < 0)
-            current_thread->setPC(current_frame->get_u2(current_thread->getPC()) - opcode_length[code]);
+            current_thread->setPC(current_thread->getPC()+(short)current_frame->get_u2(current_thread->getPC()) - opcode_length[code]);
         break;
     }
 
@@ -1000,7 +1013,7 @@ void JVM::interprete(u1 code) //这个函数可以说是虚拟机中最重要的
         jint b = current_frame->pop_jint();
         jint a = current_frame->pop_jint();
         if (a - b >= 0)
-            current_thread->setPC(current_frame->get_u2(current_thread->getPC()) - opcode_length[code]);
+            current_thread->setPC(current_thread->getPC()+(short)current_frame->get_u2(current_thread->getPC()) - opcode_length[code]);
         break;
     }
 
@@ -1009,7 +1022,7 @@ void JVM::interprete(u1 code) //这个函数可以说是虚拟机中最重要的
         jint b = current_frame->pop_jint();
         jint a = current_frame->pop_jint();
         if (a - b > 0)
-            current_thread->setPC(current_frame->get_u2(current_thread->getPC()) - opcode_length[code]);
+            current_thread->setPC(current_thread->getPC()+(short)current_frame->get_u2(current_thread->getPC()) - opcode_length[code]);
         break;
     }
 
@@ -1018,7 +1031,7 @@ void JVM::interprete(u1 code) //这个函数可以说是虚拟机中最重要的
         jint b = current_frame->pop_jint();
         jint a = current_frame->pop_jint();
         if (a - b <= 0)
-            current_thread->setPC(current_frame->get_u2(current_thread->getPC()) - opcode_length[code]);
+            current_thread->setPC(current_thread->getPC()+(short)current_frame->get_u2(current_thread->getPC()) - opcode_length[code]);
         break;
     }
 
@@ -1027,7 +1040,7 @@ void JVM::interprete(u1 code) //这个函数可以说是虚拟机中最重要的
         jobject b = current_frame->pop_jobject();
         jobject a = current_frame->pop_jobject();
         if (a - b == 0)
-            current_thread->setPC(current_frame->get_u2(current_thread->getPC()) - opcode_length[code]);
+            current_thread->setPC(current_thread->getPC()+(short)current_frame->get_u2(current_thread->getPC()) - opcode_length[code]);
         break;
     }
 
@@ -1036,12 +1049,12 @@ void JVM::interprete(u1 code) //这个函数可以说是虚拟机中最重要的
         jobject b = current_frame->pop_jobject();
         jobject a = current_frame->pop_jobject();
         if (a - b != 0)
-            current_thread->setPC(current_frame->get_u2(current_thread->getPC()) - opcode_length[code]);
+            current_thread->setPC(current_thread->getPC()+(short)current_frame->get_u2(current_thread->getPC()) - opcode_length[code]);
         break;
     }
 
     case goto_: //无条件跳转
-        current_thread->setPC(current_frame->get_u2(current_thread->getPC()) - opcode_length[code]);
+        current_thread->setPC(current_thread->getPC()+(short)current_frame->get_u2(current_thread->getPC()) - opcode_length[code]);
         break;
 
     case jsr: //跳转至指定16位offset位置，并将jsr下一条指令地址压入栈顶
@@ -1075,6 +1088,10 @@ void JVM::interprete(u1 code) //这个函数可以说是虚拟机中最重要的
     case areturn: //从当前方法返回对象引用
 
     case return_: //从当前方法返回void
+    {
+        std::cout << "jvm end" << std::endl;
+        exit(0); //暂时作为退出程序
+    }
 
     case getstatic: //获取指定类的静态域，并将其值压入栈顶
 

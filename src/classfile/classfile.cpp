@@ -492,6 +492,8 @@ void ClassFile::printFields()
 	}
 }
 
+ static u4 opcode_length[] = JVM_OPCODE_LENGTH_INITIALIZER; //每个指令的长度
+
 void ClassFile::printMethods()
 {
 	std::cout << "method_count: " << methods_count << std::endl;
@@ -521,6 +523,9 @@ void ClassFile::printMethods()
 		std::cout << "max_stack: " << code->max_stack << " max_locals: " << code->max_locals << std::endl;
 		std::cout << "code_length: " << code->code_length << std::endl;
 		for (int j = 0; j < code->code_length; j++)
+		{
 			printf("%02hhx\n", code->codes[j]);
+		}
+			
 	}
 }

@@ -19,6 +19,8 @@ ClassFile *Frame::getClassFile()
     return classfile;
 }
 
+static u4 opcode_length[] = JVM_OPCODE_LENGTH_INITIALIZER; //每个指令的长度
+
 void Frame::printFrame()
 {
     std::cout << "class_name: " << class_name << std::endl;
@@ -29,16 +31,30 @@ void Frame::printFrame()
     // for (u4 i = 0; i < code_length; i++)
     //     std::cout << codes[i] << std::endl;
     // std::cout << std::dec;
+    // for (u4 i = 0; i < code_length;)
+    // {
+    //     u4 j = i;
+    //     for (j; j < i+opcode_length[codes[i]]; j++)
+    //         printf("%02hhx\t", codes[j]);
+    //     printf("\n");
+    //     i = j+1;
+    // }
     for(u4 i = 0;i<code_length;i++)
         printf("%02hhx\n",codes[i]);
     operandStack->printOperandStack();
     localVars->printLocalVars();
 }
 
-u1 Frame::get_code(u4 pc)
+u1 Frame::get_code(u4 pc) //todo暂时将此作为程序退出的条件
 {
+    
     if (pc >= code_length)
+    {
         exit_with_massage("pc out of code length");
+        // std::cout << "jvm end" << std::endl;
+        // exit(0);
+    }
+
     return (u1)codes[pc];
 }
 
@@ -54,8 +70,8 @@ u2 Frame::get_u2(u4 pc)
         u1 _u1[2];
         u2 _u2;
     } a;
-    a._u1[0] = codes[pc + 1];
-    a._u1[1] = codes[pc + 2];
+    a._u1[1] = codes[pc + 1];
+    a._u1[0] = codes[pc + 2];
     return a._u2;
 }
 
@@ -66,10 +82,10 @@ u4 Frame::get_u4(u4 pc)
         u1 _u1[4];
         u4 _u4;
     } a;
-    a._u1[0] = codes[pc + 1];
-    a._u1[1] = codes[pc + 2];
-    a._u1[2] = codes[pc + 3];
-    a._u1[3] = codes[pc + 4];
+    a._u1[3] = codes[pc + 1];
+    a._u1[2] = codes[pc + 2];
+    a._u1[1] = codes[pc + 3];
+    a._u1[0] = codes[pc + 4];
 
     return a._u4;
 }

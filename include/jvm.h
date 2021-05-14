@@ -17,7 +17,7 @@ private:
     Thread* current_thread;//当前线程
     Frame* current_frame;//当前栈帧
 
-    static u4 opcode_length[]; //每条指令的长度
+    // static u4 opcode_length[]; //每条指令的长度
     void interprete(u1 code);//解释字节码
 
     int printCount = 0;
