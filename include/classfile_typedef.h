@@ -94,7 +94,7 @@ typedef struct {
 }Code_attribute;
 
 
-//todo 需改进
+//TODO 需改进
 typedef union {
 	char b;
 	short s;

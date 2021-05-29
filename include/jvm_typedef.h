@@ -1,5 +1,5 @@
 #pragma once
- #include <stdint.h>//此头文件里包含了uint8_t等跨平台类型
+#include <stdint.h>//此头文件里包含了uint8_t等跨平台类型
 
 //在虚拟机内部存储的都是字节
 //因为c/c++在每个不同的系统中int short long 的长度是不同的
@@ -46,14 +46,7 @@ typedef int32_t jint;
 typedef int64_t jlong;
 typedef float jfloat;
 typedef double jdouble;
-
-class object{
-
-};
-
-typedef object* jobject;
-//todo more
-
+typedef u4 jobject;//jobject为指向实例句柄的偏移量，实例句柄由mem_master统一管理
 
 //联合类型，在类型转换中使用
 union byte_32{

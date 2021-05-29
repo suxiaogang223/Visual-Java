@@ -166,18 +166,17 @@ void ClassFile::parseAttributes()
 }
 
 void ClassFile::init_static_fields()
-{
-
-	for (int i = 0; i < fields_count; i++)
-	{
-		if ((fields[i].access_flags & Flags::JVM_ACC_STATIC) != 1 && (fields[i].access_flags & Flags::JVM_ACC_FINAL) == 0)
-		{
-			std::string name(constant_pools[fields[i].name_index].utf8_info.bytes, constant_pools[fields[i].name_index].utf8_info.length); //获取属性的name
-			fieldType a;
-			a.l = 0; //初始化为0   float和double暂不考虑
-			static_fields.insert(std::pair<std::string, fieldType>(name, a));
-		}
-	}
+{//TODO 静态变量的初始化
+	// for (int i = 0; i < fields_count; i++)
+	// {
+	// 	if ((fields[i].access_flags & Flags::JVM_ACC_STATIC) != 1 && (fields[i].access_flags & Flags::JVM_ACC_FINAL) == 0)
+	// 	{
+	// 		std::string name(constant_pools[fields[i].name_index].utf8_info.bytes, constant_pools[fields[i].name_index].utf8_info.length); //获取属性的name
+	// 		fieldType a;
+	// 		a.l = 0; //初始化为0   float和double暂不考虑
+	// 		static_fields.insert(std::pair<std::string, fieldType>(name, a));
+	// 	}
+	// }
 }
 
 u1 ClassFile::getU1()
@@ -256,22 +255,67 @@ Code_attribute *ClassFile::getMethodByNameAndType(std::string main_name, std::st
 	return code;
 }
 
-fieldType ClassFile::getField(std::string name)
-{
-	if (static_fields.find(name) == static_fields.end())
-	{
-		exit_with_massage("cant't find field " + name);
-	}
-	return static_fields[name];
-}
+// fieldType ClassFile::getField(std::string name)
+// {
+// 	if (static_fields.find(name) == static_fields.end())
+// 	{
+// 		exit_with_massage("cant't find field " + name);
+// 	}
+// 	return static_fields[name];
+// }
 
-void ClassFile::setField(std::string name, fieldType value)
+// void ClassFile::setField(std::string name, fieldType value)
+// {
+// 	if (static_fields.find(name) == static_fields.end())
+// 	{
+// 		exit_with_massage("cant't find field " + name);
+// 	}
+// 	static_fields[name] = value;
+// }
+
+u4 ClassFile::getSize()
 {
-	if (static_fields.find(name) == static_fields.end())
+	u4 size = 0;
+	for (int i = 0; i < fields_count; i++)
 	{
-		exit_with_massage("cant't find field " + name);
+		u2 index = fields[i].descriptor_index;
+		std::string type_name(constant_pools[index].utf8_info.bytes, constant_pools[index].utf8_info.length);
+		//TODO 一些类型尚不支持
+		switch (type_name[0])
+		{
+
+		case Descriptor::JVM_SIGNATURE_BOOLEAN:
+			size += sizeof(jboolean);
+			break;
+		case Descriptor::JVM_SIGNATURE_BYTE:
+			size += sizeof(jbyte);
+			break;
+		case Descriptor::JVM_SIGNATURE_CHAR:
+			size += sizeof(jchar);
+			break;
+		case Descriptor::JVM_SIGNATURE_DOUBLE:
+			size += sizeof(jdouble);
+			break;
+		case Descriptor::JVM_SIGNATURE_FLOAT:
+			size += sizeof(jfloat);
+			break;
+		case Descriptor::JVM_SIGNATURE_INT:
+			size += sizeof(jint);
+			break;
+		case Descriptor::JVM_SIGNATURE_LONG:
+			size += sizeof(jlong);
+			break;
+		case Descriptor::JVM_SIGNATURE_SHORT:
+			size += sizeof(jshort);
+			break;
+		default:
+			exit_with_massage("error type");
+		}
 	}
-	static_fields[name] = value;
+	return size;
+}
+CpInfo ClassFile::getCp(u2 index){
+	return constant_pools[index];
 }
 
 byte_32 ClassFile::getConstantByte32(u2 index)
@@ -335,92 +379,92 @@ void ClassFile::printClassFile()
 
 void ClassFile::printConstantPools()
 {
-	std::cout << "constant_pool_constant: " << constant_pool_count << std::endl;
+	std::cout << "constant_pool_count: " << constant_pool_count << std::endl;
 	for (int i = 1; i < constant_pool_count; i++)
 	{
 
 		switch (constant_pools[i].tag)
 		{
 		case Tags::JVM_CONSTANT_Class:
-			std::cout << i << " Class "
-				 << " name_index: " << constant_pools[i].class_info.name_index << std::endl;
+			std::cout << i << " Class"
+					  << " name_index: " << constant_pools[i].class_info.name_index << std::endl;
 			break;
 		case Tags::JVM_CONSTANT_Fieldref:
-			std::cout << i << " Fieldref "
-				 << " class_index: " << constant_pools[i].fieldref_info.class_index << ", "
-				 << "name_and_type_index: " << constant_pools[i].fieldref_info.name_and_type_index << std::endl;
+			std::cout << i << " Fieldref"
+					  << " class_index: " << constant_pools[i].fieldref_info.class_index << ", "
+					  << "name_and_type_index: " << constant_pools[i].fieldref_info.name_and_type_index << std::endl;
 			break;
 		case Tags::JVM_CONSTANT_Methodref:
-			std::cout << i << " Methodref "
-				 << " class_index: " << constant_pools[i].methodref_info.class_index << ", "
-				 << "name_and_type_index: " << constant_pools[i].methodref_info.name_and_type_index << std::endl;
+			std::cout << i << " Methodref"
+					  << " class_index: " << constant_pools[i].methodref_info.class_index << ", "
+					  << "name_and_type_index: " << constant_pools[i].methodref_info.name_and_type_index << std::endl;
 			break;
 		case Tags::JVM_CONSTANT_InterfaceMethodref:
-			std::cout << i << " InterfaceMethodref "
-				 << " class_index: " << constant_pools[i].interfaceMethodref_info.class_index << ", "
-				 << "name_and_type_index: " << constant_pools[i].interfaceMethodref_info.name_and_type_index << std::endl;
+			std::cout << i << " InterfaceMethodref"
+					  << " class_index: " << constant_pools[i].interfaceMethodref_info.class_index << ", "
+					  << "name_and_type_index: " << constant_pools[i].interfaceMethodref_info.name_and_type_index << std::endl;
 			break;
 		case Tags::JVM_CONSTANT_String:
-			std::cout << i << " String "
-				 << " string_index: " << constant_pools[i].string_info.string_index << std::endl;
+			std::cout << i << " String"
+					  << " string_index: " << constant_pools[i].string_info.string_index << std::endl;
 			break;
 		case Tags::JVM_CONSTANT_Integer:
 			stackType constant_i;
 			constant_i.U4 = constant_pools[i].integer_info.bytes;
-			std::cout << i << " Integer "
-				 << " value: " << constant_i.i << std::endl;
+			std::cout << i << " Integer"
+					  << " value: " << constant_i.i << std::endl;
 
 			break;
 		case Tags::JVM_CONSTANT_Float:
 			stackType constant_f;
 			constant_f.U4 = constant_pools[i].float_info.bytes;
-			std::cout << i << " Float "
-				 << " value: " << constant_f.f << std::endl;
+			std::cout << i << " Float"
+					  << " value: " << constant_f.f << std::endl;
 
 			break;
 		case Tags::JVM_CONSTANT_Long:
 			stackType2 constant_l;
 			constant_l.U4[0] = constant_pools[i].long_info.low_bytes;
 			constant_l.U4[1] = constant_pools[i].long_info.high_bytes;
-			std::cout << i << " Long "
-				 << " value: " << constant_l.l << std::endl;
+			std::cout << i << " Long"
+					  << " value: " << constant_l.l << std::endl;
 			i++;
 			break;
 		case Tags::JVM_CONSTANT_Double:
 			stackType2 constant_d;
 			constant_d.U4[0] = constant_pools[i].double_info.low_bytes;
 			constant_d.U4[1] = constant_pools[i].double_info.high_bytes;
-			std::cout << i << " Double "
-				 << " value: " << constant_d.d << std::endl;
+			std::cout << i << " Double"
+					  << " value: " << constant_d.d << std::endl;
 			i++;
 			break;
 		case JVM_CONSTANT_NameAndType:
-			std::cout << i << " NameAndType "
-				 << " name_index: " << constant_pools[i].nameAndType_info.name_index << ", "
-				 << " descriptor_index: " << constant_pools[i].nameAndType_info.descriptor_index << std::endl;
+			std::cout << i << " NameAndType"
+					  << " name_index: " << constant_pools[i].nameAndType_info.name_index << ","
+					  << " descriptor_index: " << constant_pools[i].nameAndType_info.descriptor_index << std::endl;
 			break;
 		case Tags::JVM_CONSTANT_Utf8:
 		{
 			std::string cosntant_string(constant_pools[i].utf8_info.bytes, constant_pools[i].utf8_info.length);
-			std::cout << i << " Utf8 "
-				 << " constant_string: " << cosntant_string << std::endl;
+			std::cout << i << " Utf8"
+					  << " constant_string: " << cosntant_string << std::endl;
 			break;
 		}
 		case Tags::JVM_CONSTANT_MethodHandle:
-			std::cout << i << " MethodHandle "
-				 << " reference_kind: " << constant_pools[i].methodHandle_info.reference_kind << ", "
-				 << " reference_index: " << constant_pools[i].methodHandle_info.reference_index << std::endl;
+			std::cout << i << " MethodHandle"
+					  << " reference_kind: " << constant_pools[i].methodHandle_info.reference_kind << ","
+					  << " reference_index: " << constant_pools[i].methodHandle_info.reference_index << std::endl;
 
 			break;
 		case Tags::JVM_CONSTANT_MethodType:
-			std::cout << i << " MethodType "
-				 << "descriptor_index: " << constant_pools[i].methodType_info.descriptor_index << std::endl;
+			std::cout << i << " MethodType"
+					  << " descriptor_index: " << constant_pools[i].methodType_info.descriptor_index << std::endl;
 
 			break;
 		case Tags::JVM_CONSTANT_InvokeDynamic:
-			std::cout << i << " InvokeDynamic "
-				 << "attr_index: " << constant_pools[i].invokeDynamic_info.bootstrap_method_attr_index << ", "
-				 << " name_and_type_index: " << constant_pools[i].invokeDynamic_info.name_and_type_index << std::endl;
+			std::cout << i << " InvokeDynamic"
+					  << " attr_index: " << constant_pools[i].invokeDynamic_info.bootstrap_method_attr_index << ","
+					  << " name_and_type_index: " << constant_pools[i].invokeDynamic_info.name_and_type_index << std::endl;
 
 			break;
 		default:
@@ -431,7 +475,7 @@ void ClassFile::printConstantPools()
 
 void ClassFile::printFlags(u2 flags)
 {
-	std::cout << "accessFlags: ";
+	std::cout << "accessFlags:";
 	if ((flags & JVM_ACC_PUBLIC) != 0)
 		std::cout << " PUBLIC";
 	if ((flags & JVM_ACC_PRIVATE) != 0)
@@ -482,7 +526,7 @@ void ClassFile::printInterfaces()
 
 void ClassFile::printFields()
 {
-	std::cout << "fields_count: " << fields_count << std::endl;
+	std::cout << "field_count: " << fields_count << std::endl;
 	for (int i = 0; i < fields_count; i++)
 	{
 		std::cout << "Fields " << i << std::endl;
@@ -492,7 +536,7 @@ void ClassFile::printFields()
 	}
 }
 
- static u4 opcode_length[] = JVM_OPCODE_LENGTH_INITIALIZER; //每个指令的长度
+static u4 opcode_length[] = JVM_OPCODE_LENGTH_INITIALIZER; //每个指令的长度
 
 void ClassFile::printMethods()
 {
@@ -502,7 +546,7 @@ void ClassFile::printMethods()
 		std::cout << "Method: " << i << std::endl;
 		printFlags(methods[i].access_flags);
 		std::cout << "name_index: " << methods[i].name_index << std::endl;
-		std::cout << "descriptor: " << methods[i].descriptor_index << std::endl;
+		std::cout << "descriptor_index: " << methods[i].descriptor_index << std::endl;
 		char *info = NULL;
 
 		for (int j = 0; j < methods[i].attributes_count; j++)
@@ -526,6 +570,5 @@ void ClassFile::printMethods()
 		{
 			printf("%02hhx\n", code->codes[j]);
 		}
-			
 	}
 }

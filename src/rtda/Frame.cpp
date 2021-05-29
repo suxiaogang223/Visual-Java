@@ -104,6 +104,7 @@ void Frame::push_byte64(byte_64 a)
 void Frame::push_jbyte(jbyte a)
 {
     byte_32 byte32;
+    byte32._u4 = 0;
     byte32._jbyte = a;
     operandStack->push(byte32._u4); //存储纯粹数据
 }
@@ -111,12 +112,14 @@ void Frame::push_jbyte(jbyte a)
 void Frame::push_jint(jint a)
 {
     byte_32 byte32;
+    byte32._u4 = 0;
     byte32._jint = a;
     operandStack->push(byte32._u4); //存储纯粹数据
 }
 void Frame::push_jchar(jchar a)
 {
     byte_32 byte32;
+    byte32._u4 = 0;
     byte32._jchar = a;
     operandStack->push(byte32._u4); //存储纯粹数据
 }
@@ -124,6 +127,7 @@ void Frame::push_jchar(jchar a)
 void Frame::push_jboolean(jboolean a)
 {
     byte_32 byte32;
+    byte32._u4 = 0;
     byte32._jboolean = a;
     operandStack->push(byte32._u4);
 }
@@ -131,6 +135,7 @@ void Frame::push_jboolean(jboolean a)
 void Frame::push_jshort(jshort a)
 {
     byte_32 byte32;
+    byte32._u4 = 0;
     byte32._jshort = a;
     operandStack->push(byte32._u4); //存储纯粹数据
 }
@@ -146,6 +151,7 @@ void Frame::push_jlong(jlong a)
 void Frame::push_jfloat(jfloat a)
 {
     byte_32 byte32;
+    byte32._u4 = 0;
     byte32._jfloat = a;
     operandStack->push(byte32._u4); //存储纯粹数据
 }
@@ -160,9 +166,10 @@ void Frame::push_jdouble(jdouble a)
 }
 void Frame::push_jobject(jobject a)
 {
-    byte_32 byte_32;
-    byte_32._jobject = a;
-    operandStack->push(byte_32._u4);
+    byte_32 byte32;
+    byte32._u4 = 0;
+    byte32._jobject = a;
+    operandStack->push(byte32._u4);
 }
 
 void Frame::pop()

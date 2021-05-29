@@ -54,10 +54,13 @@ private:
 public:
 	ClassFile(std::string class_file_path);
 	Code_attribute* getMethodByNameAndType(std::string name,std::string type);
-	fieldType getField(std::string name);
-	void setField(std::string name, fieldType value);
+	CpInfo getCp(u2 index);
+	// fieldType getField(std::string name);
+	// void setField(std::string name, fieldType value);
 	byte_32 getConstantByte32(u2 index);
 	byte_64 getConstantByte64(u2 index);
+	u4 getSize();//用于创建实例
 	void printClassFile();
+	
 	~ClassFile();
 };
