@@ -8,6 +8,7 @@ ClassLoader::ClassLoader(std::string classpath,std::string Xjrepath){
 ClassFile* ClassLoader::load(std::string className){
     std::string class_file_classpath = classpath+className+".class";
     std::string class_file_jrepath = Xjrepath+className+".class";
+    std::cout<<class_file_classpath<<" "<<class_file_jrepath<<std::endl;
     std::fstream f1,f2;
     f1.open(class_file_classpath, std::ios::in | std::ios::binary);
     f2.open(class_file_jrepath,std::ios::in | std::ios::binary);

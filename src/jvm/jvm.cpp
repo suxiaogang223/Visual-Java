@@ -31,6 +31,18 @@ void JVM::printJVM()
     printThreads();
 }
 
+ClassFile *JVM::getClassFile(std::string classname)
+{
+    if (classfiles.find(classname) == classfiles.end())
+    {
+        ClassFile *classfile = class_loader->load(classname);
+        classfiles.insert(std::pair<std::string, ClassFile *>(classname, classfile));
+        return classfile;
+    }
+    else
+        return classfiles.at(classname);
+}
+
 void JVM::printfClassFiles()
 {
     std::cout << "ClassFiles:" << std::endl;
@@ -1047,19 +1059,91 @@ void JVM::interprete(u1 code) //这个函数可以说是虚拟机中最重要的
         //TODO
 
     case ireturn: //从当前方法返回int
+    {
+        current_thread->popFrame();
+        if (current_thread->isEmpty())
+        {
+            std::cout << "jvm end" << std::endl;
+            exit(current_frame->pop_jint());
+        }
+        Frame *back_frame = current_thread->getTop();
+        back_frame->push_jint(current_frame->pop_jint());
+        current_frame = back_frame;
+        current_thread->setPC(current_thread->getPC() - opcode_length[code]);
+        break;
+    }
 
     case lreturn: //从当前方法返回long
+    {
+        current_thread->popFrame();
+        if (current_thread->isEmpty())
+        {
+            std::cout << "jvm end" << std::endl;
+            exit(current_frame->pop_jlong());
+        }
+        Frame *back_frame = current_thread->getTop();
+        back_frame->push_jlong(current_frame->pop_jlong());
+        current_frame = back_frame;
+        current_thread->setPC(current_thread->getPC() - opcode_length[code]);
+        break;
+    }
 
     case freturn: //从当前方法返回float
-
+    {
+        current_thread->popFrame();
+        if (current_thread->isEmpty())
+        {
+            std::cout << "jvm end" << std::endl;
+            exit(current_frame->pop_jfloat());
+        }
+        Frame *back_frame = current_thread->getTop();
+        back_frame->push_jfloat(current_frame->pop_jfloat());
+        current_frame = back_frame;
+        current_thread->setPC(current_thread->getPC() - opcode_length[code]);
+        break;
+    }
     case dreturn: //从当前方法返回double
+    {
+        current_thread->popFrame();
+        if (current_thread->isEmpty())
+        {
+            std::cout << "jvm end" << std::endl;
+            exit(current_frame->pop_jdouble());
+        }
+        Frame *back_frame = current_thread->getTop();
+        back_frame->push_jdouble(current_frame->pop_jdouble());
+        current_frame = back_frame;
+        current_thread->setPC(current_thread->getPC() - opcode_length[code]);
+        break;
+    }
 
     case areturn: //从当前方法返回对象引用
+    {
+        current_thread->popFrame();
+        if (current_thread->isEmpty())
+        {
+            std::cout << "jvm end" << std::endl;
+            exit(current_frame->pop_jobject());
+        }
+        Frame *back_frame = current_thread->getTop();
+        back_frame->push_jobject(current_frame->pop_jobject());
+        current_frame = back_frame;
+        current_thread->setPC(current_thread->getPC() - opcode_length[code]);
+        break;
+    }
 
     case return_: //从当前方法返回void
     {
-        std::cout << "jvm end" << std::endl;
-        exit(0); //暂时作为退出程序
+        current_thread->popFrame();
+        if(current_thread->isEmpty())
+        {
+            std::cout << "jvm end" << std::endl;
+            exit(0);
+        }
+        Frame* back_frame = current_thread->getTop();
+        current_frame = back_frame;
+        current_thread->setPC(current_thread->getPC()-opcode_length[code]);
+        break;
     }
     //TODO
     case getstatic: //获取指定类的静态域，并将其值压入栈顶
@@ -1075,19 +1159,283 @@ void JVM::interprete(u1 code) //这个函数可以说是虚拟机中最重要的
         u2 field_name_index = current_frame->getClassFile()->getCp(name_type_index).nameAndType_info.name_index;
         u2 field_type_index = current_frame->getClassFile()->getCp(name_type_index).nameAndType_info.descriptor_index;
 
-        std::string class_name(current_frame->getClassFile()->getCp(class_name_index).utf8_info.bytes,current_frame->getClassFile()->getCp(class_name_index).utf8_info.length);
-        std::string field_name(current_frame->getClassFile()->getCp(filed_name_index).utf8_info.bytes,current_frame->getClassFile()->getCp(field_name_index).utf8_info.length);
-        std::string field_type(current_frame->getClassFile()->getCp(field_type_index).utf8_info.bytes,current_frame->getClassFile()->getCp(field_type_index).utf8_info.length);
+        std::string class_name(current_frame->getClassFile()->getCp(class_name_index).utf8_info.bytes, current_frame->getClassFile()->getCp(class_name_index).utf8_info.length);
+        std::string field_name(current_frame->getClassFile()->getCp(field_name_index).utf8_info.bytes, current_frame->getClassFile()->getCp(field_name_index).utf8_info.length);
+        std::string field_type(current_frame->getClassFile()->getCp(field_type_index).utf8_info.bytes, current_frame->getClassFile()->getCp(field_type_index).utf8_info.length);
     }
 
     case putfield: //为指定的类的实例域赋值
 
     case invokevirtual: //调用实例方法
+    {
+        u2 index = current_frame->get_u2(current_thread->getPC());
+        u2 class_index = current_frame->getClassFile()->getCp(index).methodref_info.class_index;
+        u2 name_type_index = current_frame->getClassFile()->getCp(index).methodref_info.name_and_type_index;
+        u2 class_name_index = current_frame->getClassFile()->getCp(class_index).class_info.name_index;
+        u2 method_name_index = current_frame->getClassFile()->getCp(name_type_index).nameAndType_info.name_index;
+        u2 method_type_index = current_frame->getClassFile()->getCp(name_type_index).nameAndType_info.descriptor_index;
+        std::string class_name(current_frame->getClassFile()->getCp(class_name_index).utf8_info.bytes, current_frame->getClassFile()->getCp(class_name_index).utf8_info.length);
+        std::string method_name(current_frame->getClassFile()->getCp(method_name_index).utf8_info.bytes, current_frame->getClassFile()->getCp(method_name_index).utf8_info.length);
+        std::string method_type(current_frame->getClassFile()->getCp(method_type_index).utf8_info.bytes, current_frame->getClassFile()->getCp(method_type_index).utf8_info.length);
+        Frame *new_frame = new Frame(getClassFile(class_name), class_name, method_name, method_type);
+        std::stack<char> args;
+        for (int i = 0; i < method_type.length(); i++)
+        { //解析参数列表
+            if (method_type.data()[i] == Descriptor::JVM_SIGNATURE_FUNC)
+                continue;
+            else if (method_type.data()[i] == Descriptor::JVM_SIGNATURE_ARRAY || method_type.data()[i] == Descriptor::JVM_SIGNATURE_CLASS)
+            {
+                args.push(method_type.data()[i]);
+                do
+                {
+                    i++;
+                } while (method_type.data()[i] != Descriptor::JVM_SIGNATURE_ENDCLASS);
+            }
+            else if (method_type.data()[i] == Descriptor::JVM_SIGNATURE_DOUBLE || method_type.data()[i] == Descriptor::JVM_SIGNATURE_LONG)
+            {
+                args.push(method_type.data()[i]);
+                args.push(method_type.data()[i]);
+            }
+            else if (method_type.data()[i] == Descriptor::JVM_SIGNATURE_ENDFUNC)
+                break;
+            else
+                args.push(method_type.data()[i]);
+        }
+        while (!args.empty())
+        {
+            switch (args.top())
+            {
+            case Descriptor::JVM_SIGNATURE_ARRAY:
+                // new_frame->storea(args.size(), currentFrame->popa());
+                // new_frame.store
+                // args.pop();
+                break;
+            case Descriptor::JVM_SIGNATURE_BOOLEAN:
+                new_frame->store_jboolean(args.size(), current_frame->pop_jboolean());
+                args.pop();
+                break;
+            case Descriptor::JVM_SIGNATURE_BYTE:
+                new_frame->store_jbyte(args.size(), current_frame->pop_jbyte());
+                args.pop();
+                break;
+            case Descriptor::JVM_SIGNATURE_CHAR:
+                new_frame->store_jchar(args.size(), current_frame->pop_jchar());
+                args.pop();
+                break;
+            case Descriptor::JVM_SIGNATURE_DOUBLE:
+                new_frame->store_jdouble(args.size() - 1, current_frame->pop_jdouble());
+                args.pop();
+                args.pop();
+                break;
+            case Descriptor::JVM_SIGNATURE_FLOAT:
+                new_frame->store_jfloat(args.size(), current_frame->pop_jfloat());
+                args.pop();
+                break;
+            case Descriptor::JVM_SIGNATURE_INT:
+                new_frame->store_jint(args.size(), current_frame->pop_jint());
+                args.pop();
+                break;
+            case Descriptor::JVM_SIGNATURE_LONG:
+                new_frame->store_jlong(args.size() - 1, current_frame->pop_jlong());
+                args.pop();
+                args.pop();
+                break;
+            case Descriptor::JVM_SIGNATURE_SHORT:
+                new_frame->store_jshort(args.size(), current_frame->pop_jshort());
+                args.pop();
+                break;
+            default:
+                exit_with_massage("未知的参数类型 : " + args.top());
+            }
+        }
+        new_frame->store_jobject(0, current_frame->pop_jobject());
+        current_thread->setPC(current_thread->getPC() + opcode_length[code]);
+        current_thread->pushFrame(new_frame);
+        current_frame = new_frame;
+        current_thread->setPC(current_thread->getPC() - opcode_length[code]);
+        break;
+    }
 
     case invokespecial: //调用超类构造方法，实例初始化方法，私有方法
+    {
+        u2 index = current_frame->get_u2(current_thread->getPC());
+        u2 class_index = current_frame->getClassFile()->getCp(index).methodref_info.class_index;
+        u2 name_type_index = current_frame->getClassFile()->getCp(index).methodref_info.name_and_type_index;
+        u2 class_name_index = current_frame->getClassFile()->getCp(class_index).class_info.name_index;
+        u2 method_name_index = current_frame->getClassFile()->getCp(name_type_index).nameAndType_info.name_index;
+        u2 method_type_index = current_frame->getClassFile()->getCp(name_type_index).nameAndType_info.descriptor_index;
+        std::string class_name(current_frame->getClassFile()->getCp(class_name_index).utf8_info.bytes, current_frame->getClassFile()->getCp(class_name_index).utf8_info.length);
+        std::string method_name(current_frame->getClassFile()->getCp(method_name_index).utf8_info.bytes, current_frame->getClassFile()->getCp(method_name_index).utf8_info.length);
+        std::string method_type(current_frame->getClassFile()->getCp(method_type_index).utf8_info.bytes, current_frame->getClassFile()->getCp(method_type_index).utf8_info.length);
+        Frame *new_frame = new Frame(getClassFile(class_name), class_name, method_name, method_type);
+        std::stack<char> args;
+        for (int i = 0; i < method_type.length(); i++)
+        { //解析参数列表
+            if (method_type.data()[i] == Descriptor::JVM_SIGNATURE_FUNC)
+                continue;
+            else if (method_type.data()[i] == Descriptor::JVM_SIGNATURE_ARRAY || method_type.data()[i] == Descriptor::JVM_SIGNATURE_CLASS)
+            {
+                args.push(method_type.data()[i]);
+                do
+                {
+                    i++;
+                } while (method_type.data()[i] != Descriptor::JVM_SIGNATURE_ENDCLASS);
+            }
+            else if (method_type.data()[i] == Descriptor::JVM_SIGNATURE_DOUBLE || method_type.data()[i] == Descriptor::JVM_SIGNATURE_LONG)
+            {
+                args.push(method_type.data()[i]);
+                args.push(method_type.data()[i]);
+            }
+            else if (method_type.data()[i] == Descriptor::JVM_SIGNATURE_ENDFUNC)
+                break;
+            else
+                args.push(method_type.data()[i]);
+        }
+        while (!args.empty())
+        {
+            switch (args.top())
+            {
+            case Descriptor::JVM_SIGNATURE_ARRAY:
+                // new_frame->storea(args.size(), currentFrame->popa());
+                // new_frame.store
+                // args.pop();
+                break;
+            case Descriptor::JVM_SIGNATURE_BOOLEAN:
+                new_frame->store_jboolean(args.size(), current_frame->pop_jboolean());
+                args.pop();
+                break;
+            case Descriptor::JVM_SIGNATURE_BYTE:
+                new_frame->store_jbyte(args.size(), current_frame->pop_jbyte());
+                args.pop();
+                break;
+            case Descriptor::JVM_SIGNATURE_CHAR:
+                new_frame->store_jchar(args.size(), current_frame->pop_jchar());
+                args.pop();
+                break;
+            case Descriptor::JVM_SIGNATURE_DOUBLE:
+                new_frame->store_jdouble(args.size() - 1, current_frame->pop_jdouble());
+                args.pop();
+                args.pop();
+                break;
+            case Descriptor::JVM_SIGNATURE_FLOAT:
+                new_frame->store_jfloat(args.size(), current_frame->pop_jfloat());
+                args.pop();
+                break;
+            case Descriptor::JVM_SIGNATURE_INT:
+                new_frame->store_jint(args.size(), current_frame->pop_jint());
+                args.pop();
+                break;
+            case Descriptor::JVM_SIGNATURE_LONG:
+                new_frame->store_jlong(args.size() - 1, current_frame->pop_jlong());
+                args.pop();
+                args.pop();
+                break;
+            case Descriptor::JVM_SIGNATURE_SHORT:
+                new_frame->store_jshort(args.size(), current_frame->pop_jshort());
+                args.pop();
+                break;
+            default:
+                exit_with_massage("未知的参数类型 : " + args.top());
+            }
+        }
+        new_frame->store_jobject(0, current_frame->pop_jobject());
+        current_thread->setPC(current_thread->getPC() + opcode_length[code]);
+        current_thread->pushFrame(new_frame);
+        current_frame = new_frame;
+        current_thread->setPC(current_thread->getPC() - opcode_length[code]);
+        break;
+    }
 
     case invokestatic: //调用静态方法
+    {
+        u2 index = current_frame->get_u2(current_thread->getPC());
+        u2 class_index = current_frame->getClassFile()->getCp(index).methodref_info.class_index;
+        u2 name_type_index = current_frame->getClassFile()->getCp(index).methodref_info.name_and_type_index;
+        u2 class_name_index = current_frame->getClassFile()->getCp(class_index).class_info.name_index;
+        u2 method_name_index = current_frame->getClassFile()->getCp(name_type_index).nameAndType_info.name_index;
+        u2 method_type_index = current_frame->getClassFile()->getCp(name_type_index).nameAndType_info.descriptor_index;
+        std::string class_name(current_frame->getClassFile()->getCp(class_name_index).utf8_info.bytes, current_frame->getClassFile()->getCp(class_name_index).utf8_info.length);
+        std::string method_name(current_frame->getClassFile()->getCp(method_name_index).utf8_info.bytes, current_frame->getClassFile()->getCp(method_name_index).utf8_info.length);
+        std::string method_type(current_frame->getClassFile()->getCp(method_type_index).utf8_info.bytes, current_frame->getClassFile()->getCp(method_type_index).utf8_info.length);
+        Frame *new_frame = new Frame(getClassFile(class_name), class_name, method_name, method_type);
+        std::stack<char> args;
+        for (int i = 0; i < method_type.length(); i++)
+        { //解析参数列表
+            if (method_type.data()[i] == Descriptor::JVM_SIGNATURE_FUNC)
+                continue;
+            else if (method_type.data()[i] == Descriptor::JVM_SIGNATURE_ARRAY || method_type.data()[i] == Descriptor::JVM_SIGNATURE_CLASS)
+            {
+                args.push(method_type.data()[i]);
+                do
+                {
+                    i++;
+                } while (method_type.data()[i] != Descriptor::JVM_SIGNATURE_ENDCLASS);
+            }
+            else if (method_type.data()[i] == Descriptor::JVM_SIGNATURE_DOUBLE || method_type.data()[i] == Descriptor::JVM_SIGNATURE_LONG)
+            {
+                args.push(method_type.data()[i]);
+                args.push(method_type.data()[i]);
+            }
+            else if (method_type.data()[i] == Descriptor::JVM_SIGNATURE_ENDFUNC)
+                break;
+            else
+                args.push(method_type.data()[i]);
+        }
+        while (!args.empty())
+        {
+            switch (args.top())
+            {
+            case Descriptor::JVM_SIGNATURE_ARRAY:
+                // new_frame->storea(args.size(), currentFrame->popa());
+                // new_frame.store
+                // args.pop();
+                break;
+            case Descriptor::JVM_SIGNATURE_BOOLEAN:
+                new_frame->store_jboolean(args.size() - 1, current_frame->pop_jboolean());
+                args.pop();
+                break;
+            case Descriptor::JVM_SIGNATURE_BYTE:
+                new_frame->store_jbyte(args.size() - 1, current_frame->pop_jbyte());
+                args.pop();
+                break;
+            case Descriptor::JVM_SIGNATURE_CHAR:
+                new_frame->store_jchar(args.size() - 1, current_frame->pop_jchar());
+                args.pop();
+                break;
+            case Descriptor::JVM_SIGNATURE_DOUBLE:
+                new_frame->store_jdouble(args.size() - 2, current_frame->pop_jdouble());
+                args.pop();
+                args.pop();
+                break;
+            case Descriptor::JVM_SIGNATURE_FLOAT:
+                new_frame->store_jfloat(args.size() - 1, current_frame->pop_jfloat());
+                args.pop();
+                break;
+            case Descriptor::JVM_SIGNATURE_INT:
+                new_frame->store_jint(args.size() - 1, current_frame->pop_jint());
+                args.pop();
+                break;
+            case Descriptor::JVM_SIGNATURE_LONG:
+                new_frame->store_jlong(args.size() - 2, current_frame->pop_jlong());
+                args.pop();
+                args.pop();
+                break;
+            case Descriptor::JVM_SIGNATURE_SHORT:
+                new_frame->store_jshort(args.size() - 1, current_frame->pop_jshort());
+                args.pop();
+                break;
+            default:
+                exit_with_massage("未知的参数类型 : " + args.top());
+            }
+        }
+        current_thread->setPC(current_thread->getPC() + opcode_length[code]);
+        current_thread->pushFrame(new_frame);
+        current_frame = new_frame;
+        current_thread->setPC(current_thread->getPC() - opcode_length[code]);
+        break;
+    }
 
+    //TODO
     case invokeinterface: //调用接口方法
 
         //case –: //无此指令

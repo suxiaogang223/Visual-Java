@@ -23,6 +23,7 @@ private:
     void interprete(u1 code);//解释字节码
 
     int printCount = 0;
+    inline ClassFile* getClassFile(std::string classname);
     inline void printJVM();
     inline void printfClassFiles();
     inline void printThreads();
