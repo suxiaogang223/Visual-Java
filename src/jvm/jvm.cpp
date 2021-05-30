@@ -597,32 +597,32 @@ void JVM::interprete(u1 code) //这个函数可以说是虚拟机中最重要的
 
     case is: //将栈顶两int型数值相减并将结果压入栈顶
     {
-        jint a = current_frame->pop_jint();
         jint b = current_frame->pop_jint();
+        jint a = current_frame->pop_jint();
         current_frame->push_jint(a - b);
         break;
     }
 
     case ls: //将栈顶两long型数值相减并将结果压入栈顶
     {
-        jlong a = current_frame->pop_jlong();
         jlong b = current_frame->pop_jlong();
+        jlong a = current_frame->pop_jlong();
         current_frame->push_jlong(a - b);
         break;
     }
 
     case fs: //将栈顶两float型数值相减并将结果压入栈顶
     {
-        jfloat a = current_frame->pop_jfloat();
         jfloat b = current_frame->pop_jfloat();
+        jfloat a = current_frame->pop_jfloat();
         current_frame->push_jfloat(a - b);
         break;
     }
 
     case ds: //将栈顶两double型数值相减并将结果压入栈顶
     {
-        jdouble a = current_frame->pop_jdouble();
         jdouble b = current_frame->pop_jdouble();
+        jdouble a = current_frame->pop_jdouble();
         current_frame->push_jdouble(a - b);
         break;
     }
@@ -645,64 +645,64 @@ void JVM::interprete(u1 code) //这个函数可以说是虚拟机中最重要的
 
     case idiv: //将栈顶两int型数值相除并将结果压入栈顶
     {
-        jint a = current_frame->pop_jint();
         jint b = current_frame->pop_jint();
+        jint a = current_frame->pop_jint();
         current_frame->push_jint(a / b);
         break;
     }
 
     case ldiv_: //将栈顶两long型数值相除并将结果压入栈顶
     {
-        jlong a = current_frame->pop_jlong();
         jlong b = current_frame->pop_jlong();
+        jlong a = current_frame->pop_jlong();
         current_frame->push_jlong(a / b);
         break;
     }
 
     case fdiv: //将栈顶两float型数值相除并将结果压入栈顶
     {
-        jfloat a = current_frame->pop_jfloat();
         jfloat b = current_frame->pop_jfloat();
+        jfloat a = current_frame->pop_jfloat();
         current_frame->push_jfloat(a / b);
         break;
     }
 
     case ddiv: //将栈顶两double型数值相除并将结果压入栈顶
     {
-        jdouble a = current_frame->pop_jdouble();
         jdouble b = current_frame->pop_jdouble();
+        jdouble a = current_frame->pop_jdouble();
         current_frame->push_jdouble(a / b);
         break;
     }
 
     case irem: //将栈顶两int型数值作取模运算并将结果压入栈顶
     {
-        jint a = current_frame->pop_jint();
         jint b = current_frame->pop_jint();
+        jint a = current_frame->pop_jint();
         current_frame->push_jint(a % b);
         break;
     }
 
     case lrem: //将栈顶两long型数值作取模运算并将结果压入栈顶
     {
-        jlong a = current_frame->pop_jlong();
         jlong b = current_frame->pop_jlong();
+        jlong a = current_frame->pop_jlong();
         current_frame->push_jlong(a % b);
         break;
     }
 
     case frem: //将栈顶两float型数值作取模运算并将结果压入栈顶
     {
-        jfloat a = current_frame->pop_jfloat();
         jfloat b = current_frame->pop_jfloat();
+        jfloat a = current_frame->pop_jfloat();
         current_frame->push_jfloat((jfloat)((jint)a % (jint)b)); //flaot类型取模运算？意义何在？
         break;
     }
 
     case drem: //将栈顶两double型数值作取模运算并将结果压入栈顶
     {
-        jdouble a = current_frame->pop_jdouble();
         jdouble b = current_frame->pop_jdouble();
+        jdouble a = current_frame->pop_jdouble();
         current_frame->push_jdouble((jdouble)((jlong)a % (jlong)b)); //double类型取模运算？意义何在？
         break;
     }
@@ -1135,14 +1135,14 @@ void JVM::interprete(u1 code) //这个函数可以说是虚拟机中最重要的
     case return_: //从当前方法返回void
     {
         current_thread->popFrame();
-        if(current_thread->isEmpty())
+        if (current_thread->isEmpty())
         {
             std::cout << "jvm end" << std::endl;
             exit(0);
         }
-        Frame* back_frame = current_thread->getTop();
+        Frame *back_frame = current_thread->getTop();
         current_frame = back_frame;
-        current_thread->setPC(current_thread->getPC()-opcode_length[code]);
+        current_thread->setPC(current_thread->getPC() - opcode_length[code]);
         break;
     }
     //TODO
